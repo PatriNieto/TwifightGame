@@ -5,7 +5,8 @@ class MainCharacter {
     this.y = 500
     this.w = 100
     this.h = 100
-
+    this.life = 100
+    this.points = 0
     this.jumpSpeed = 150
     this.gravityForce = 5
 
@@ -14,7 +15,7 @@ class MainCharacter {
     //cambiamos el src del nuevo elemento
     this.node.src = "../resources/mainCharacter.png"
 
-    //lo añadimos al DOM
+    //lo añadimos al DOM 
     gameBoxNode.append(this.node);
 
     //ajustamos su anchura y altura
