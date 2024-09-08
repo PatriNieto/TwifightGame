@@ -73,6 +73,11 @@ function gameLoop(){
   detectIfBatOut()
   detectIfGarlicOut()
 
+  /* detectar colisiones para quitar vida o dar puntos 
+  estas funciones serán implementados en este main */ 
+  detectIfCollWithBat()
+  detectIfCollWithGarlic()
+
 }
 
 function gameOver(){}
@@ -82,7 +87,7 @@ function restartGame(){
   gameScreenNode.style.display = "flex"
 }
 
-/*   -------  function definitions  ---------  */ 
+                          /*   -------  function definitions  ---------  */ 
 
 /* functions to add the elements */ 
 function addBat(){
@@ -121,14 +126,45 @@ function detectIfGarlicOut(){
     
   }
 }
+/* functions to detect the collision with the elements */ 
+function detectIfCollWithBat(){
+  //we do a forEach to get to eachBat
+  batArr.forEach((eachBat)=>{
+  //we compare the mainChar with eachBat on screen to get collisions
+  //collision logic from https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
+  if (
+    mainCharacter.x < eachBat.x + eachBat.w &&
+    mainCharacter.x + mainCharacter.w > eachBat.x &&
+    mainCharacter.y < eachBat.y + eachBat.h &&
+    mainCharacter.y + mainCharacter.h > eachBat.y
+  ) {
+    // Collision detected!
+    console.log("Collision detected!");
+  } 
+
+})
+}
+function detectIfCollWithGarlic(){
+  //we do a forEach to get to eachGarlic
+  garlicArr.forEach((eachGarlic)=>{
+    //we compare the mainChar with eachBat on screen to get collisions
+    //collision logic from https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
+    if (
+      mainCharacter.x < eachGarlic.x + eachGarlic.w &&
+      mainCharacter.x + mainCharacter.w > eachGarlic.x &&
+      mainCharacter.y < eachGarlic.y + eachGarlic.h &&
+      mainCharacter.y + mainCharacter.h > eachGarlic.y
+    ) {
+      // Collision detected!
+      console.log("Collision garlic detected!");
+    } 
+})
+}
 
 
+                           /*     SCREEN CHANGES  */
 
-
-
-/* PASAR A SIGUIENTE PANTALLA */
 /* Add Event Listeners */ 
-
 startButtonNode.addEventListener("click", ()=>{
   startGame()
 })
@@ -137,8 +173,7 @@ ReStartButtonNode.addEventListener("click", ()=>{
   restartGame()
 }) 
 
-
-/* salto del personaje */
+/* mainCharacter jump() */
 
 gameBoxNode.addEventListener("click", ()=>{
   mainCharacter.jump();

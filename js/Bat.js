@@ -4,7 +4,7 @@ class Bat {
     this.x = gameBoxNode.offsetWidth;
     this.y = 250
     this.w = 300
-    this.h = 300
+    this.h = 200
     this.speed = 2
 
 
