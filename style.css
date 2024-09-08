@@ -1,0 +1,72 @@
+body{
+  background-color: black;
+  font-family:  'Pixelify Sans',Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+
+
+#start-screen {
+  display:flex;
+  color:white;
+  font-size: 3em;
+  text-align: center;
+}
+
+#start-screen button {
+  font-size: 3em;
+  font-family:  'Pixelify Sans',Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+#end-screen button {
+  font-size: 2em;
+  font-family:  'Pixelify Sans',Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+#game-screen {
+  display:none;
+  font-size: 3em;
+  color: aliceblue;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+}
+
+#game-box {
+  background-color: blueviolet;
+  width: 800px; 
+  height: 600px;
+  text-align: center;
+  align-items: center;
+  margin: auto;
+  background-image: url("./resources/Background/2layers.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  border: 1px solid white;
+}
+
+#info{
+  display: flex;
+  text-align: center;
+  align-items: center;
+  width: 800px; 
+  justify-content: space-between;
+  margin: auto;
+ 
+}
+
+#info p{
+  margin-bottom: 0
+}
+
+#end-screen{
+  display:none;
+  color: white;
+  font-size: 8em;
+  text-align: center;
+}
+
+.container{
+  display:none;
+  flex-direction: column;
+}
+

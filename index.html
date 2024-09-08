@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+  <title>Tiwfight</title>
+</head>
+<body>
+
+  <!--START SCREEN-->
+  <!--container nos dara el mismo aspecto de tamaño y ajuste en la pantalla para las tres pantallas-->
+  <div id="start-screen" class="container">
+    <img src="./resources/TwiFight-blue-title.png" alt="">
+    <p>Instructions : To jump, press the spacebar.</p>
+    
+    <button id="start-button">START</button>
+
+  </div>
+  <!--GAME SCREEN-->
+  <!--aqui los elementos exteriores al juego-->
+  <div id="game-screen" class="container">
+    <div id="info">
+      <p>POINTS : 0000</p>
+      <p>LIFE : 100%</p>
+    </div>
+    
+    <div id="game-box"></div>
+  </div>
+  <!--END SCREEN-->
+  <div id="end-screen" class="container">
+    <h3>GAME OVER!</h3>
+    <button id="restart-button">RESTART</button>
+  </div>
+  
+
+<script src="main.js"></script>
+</body>
+</html>
