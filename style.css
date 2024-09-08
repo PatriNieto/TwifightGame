@@ -29,6 +29,7 @@ body{
   align-content: center;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
 #game-box {
@@ -36,12 +37,18 @@ body{
   width: 800px; 
   height: 600px;
   text-align: center;
-  align-items: center;
   margin: auto;
   background-image: url("./resources/Background/2layers.png");
   background-repeat: no-repeat;
   background-size: cover;
   border: 1px solid white;
+
+  /* para que el personaje se ubique */ 
+  position: relative;
+  overflow: hidden;
+  user-select: none; /* para que los elementos no sean seleccionables*/
+  
+  
 }
 
 #info{
@@ -66,7 +73,9 @@ body{
 }
 
 .container{
-  display:none;
+  display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
