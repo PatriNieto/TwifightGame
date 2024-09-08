@@ -9,7 +9,8 @@ const  gameBoxNode = document.querySelector("#game-box");
 // DOM elements
 let lifeNode = gameScreenNode.querySelector("#life");
 let pointsNode = gameScreenNode.querySelector("#points");
-
+let resultNode = endScreenNode.querySelector("#game-result");
+let totalPointsNode = endScreenNode.querySelector("#total-points");
 //botones
 const startButtonNode = document.querySelector("#start-button");
 const ReStartButtonNode = document.querySelector("#restart-button");
@@ -92,6 +93,15 @@ function gameOver(){
   //cleam game-box
   gameBoxNode.innerHTML = ""
 
+  //mostrar texto you Win/ you lose
+  if(mainCharacter.life <= 0 ){
+    //you lose
+    resultNode.innerHTML = `YOU lOSE`
+    totalPointsNode.innerHTML = `total points : ${mainCharacter.points}`
+  } else {
+    resultNode.innerHTML = `YOU lOSE`
+    totalPointsNode.innerHTML = `total points : ${mainCharacter.points}`
+  }
   //cambiar a la pantalla final
   gameScreenNode.style.display = "none"
   endScreenNode.style.display = "flex"
@@ -100,6 +110,8 @@ function gameOver(){
 function restartGame(){
   endScreenNode.style.display = "none"
   gameScreenNode.style.display = "flex"
+  
+  startGame()
 }
 
                           /*   -------  function definitions  ---------  */ 
