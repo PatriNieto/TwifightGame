@@ -5,6 +5,11 @@ const startScreenNode = document.querySelector("#start-screen");
 const gameScreenNode = document.querySelector("#game-screen");
 const endScreenNode = document.querySelector("#end-screen");
 const  gameBoxNode = document.querySelector("#game-box");
+
+// DOM elements
+let lifeNode = gameScreenNode.querySelector("#life");
+let pointsNode = gameScreenNode.querySelector("#points");
+
 //botones
 const startButtonNode = document.querySelector("#start-button");
 const ReStartButtonNode = document.querySelector("#restart-button");
@@ -31,9 +36,7 @@ function startGame(){
   //elementos iniciales del juego
   mainCharacter = new MainCharacter()
   //incluimos mainCharacter.life y mainCharacter.points en el DOM
-  let lifeNode = gameScreenNode.querySelector("#life");
   lifeNode.innerHTML = `LIFE : ${mainCharacter.life}`
-  let pointsNode = gameScreenNode.querySelector("#points");
   pointsNode.innerHTML = `POINTS : 000${mainCharacter.points}`
 
   //el juego 
@@ -80,7 +83,19 @@ function gameLoop(){
 
 }
 
-function gameOver(){}
+function gameOver(){
+  //clean the intervals
+  clearInterval(intervalGameLoopId)
+  clearInterval(intervalBatsId)
+  clearInterval(intervalGarlic)
+
+  //cleam game-box
+  gameBoxNode.innerHTML = ""
+
+  //cambiar a la pantalla final
+  gameScreenNode.style.display = "none"
+  endScreenNode.style.display = "flex"
+}
 
 function restartGame(){
   endScreenNode.style.display = "none"
@@ -129,7 +144,7 @@ function detectIfGarlicOut(){
 /* functions to detect the collision with the elements */ 
 function detectIfCollWithBat(){
   //we do a forEach to get to eachBat
-  batArr.forEach((eachBat)=>{
+  batArr.forEach((eachBat, index)=>{
   //we compare the mainChar with eachBat on screen to get collisions
   //collision logic from https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
   if (
@@ -138,15 +153,23 @@ function detectIfCollWithBat(){
     mainCharacter.y < eachBat.y + eachBat.h &&
     mainCharacter.y + mainCharacter.h > eachBat.y
   ) {
-    // Collision detected!
-    console.log("Collision detected!");
+    // adjusted points in js and in dom
+    mainCharacter.points += eachBat.pointsGiven
+    pointsNode.innerHTML = `POINTS : 0${mainCharacter.points}`
+    //borrar el elemento de js y del dom
+    batArr[index].node.remove()
+    batArr.splice(index,1);
+    
+    if(mainCharacter.points >= 1000){
+      gameOver();
+    }
   } 
 
 })
 }
 function detectIfCollWithGarlic(){
   //we do a forEach to get to eachGarlic
-  garlicArr.forEach((eachGarlic)=>{
+  garlicArr.forEach((eachGarlic, index)=>{
     //we compare the mainChar with eachBat on screen to get collisions
     //collision logic from https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
     if (
@@ -156,7 +179,15 @@ function detectIfCollWithGarlic(){
       mainCharacter.y + mainCharacter.h > eachGarlic.y
     ) {
       // Collision detected!
-      console.log("Collision garlic detected!");
+      
+      mainCharacter.life -= 20
+      lifeNode.innerHTML = `LIFE : 0${mainCharacter.life}`
+      //borrar el elemento del dom
+      garlicArr[index].node.remove()
+      garlicArr.splice(index,1);
+      if(mainCharacter.life === 0){
+        gameOver();
+      }
     } 
 })
 }
