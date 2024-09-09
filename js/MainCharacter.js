@@ -17,6 +17,7 @@ class MainCharacter {
 
     //lo añadimos al DOM 
     gameBoxNode.append(this.node);
+    this.node.id = "#main-char"
 
     //ajustamos su anchura y altura
 

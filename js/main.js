@@ -280,14 +280,38 @@ ReStartButtonNode.addEventListener("click", ()=>{
 
 /* mainCharacter jump() */
 
-gameBoxNode.addEventListener("click", ()=>{
+window.addEventListener("click", ()=>{
   mainCharacter.jump();
   mainCharacter.node.src = "../resources/mainCharJumping.gif"
   setTimeout(()=>{
     mainCharacter.node.src = "../resources/mainChar.gif"
   }, 650);
-  
 }); 
+window.addEventListener("keydown", (event)=>{
+  switch(event.key){
+    case "ArrowRight":
+      if(mainCharacter.x <= gameBoxNode.offsetWidth-150){
+        mainCharacter.x +=10
+      //lo ajustamos en el DOM
+      mainCharacter.node.style.left = `${mainCharacter.x}px`
+      }
+      break;
+    case "ArrowLeft":
+      if(mainCharacter.x >= 100){
+        mainCharacter.x -=10
+      //lo ajustamos en el DOM
+      mainCharacter.node.style.left = `${mainCharacter.x}px`
+      }
+      break;
+    case "ArrowUp":
+      mainCharacter.jump();
+  mainCharacter.node.src = "../resources/mainCharJumping.gif"
+  setTimeout(()=>{
+    mainCharacter.node.src = "../resources/mainChar.gif"
+  }, 650);
+  break;
+  };
+})
 
 
 //sound button musicGameNode
@@ -303,5 +327,5 @@ musicGameButtonNode.addEventListener("click", ()=>{
   isSound = true
   musicGameButtonNode.src = "./resources/sound.png"
  }
-});
+})
 
