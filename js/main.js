@@ -12,6 +12,8 @@ let pointsNode = gameScreenNode.querySelector("#points");
 let resultNode = endScreenNode.querySelector("#game-result");
 let totalPointsNode = endScreenNode.querySelector("#total-points");
 let musicGameNode = gameScreenNode.querySelector("audio");
+let musicGameOverNode = endScreenNode.querySelector("#game-over-audio");
+let musicGameWinNode = endScreenNode.querySelector("#game-win-audio");
 
 //botones
 const startButtonNode = document.querySelector("#start-button");
@@ -42,6 +44,19 @@ function startGame(){
   //incluimos mainCharacter.life y mainCharacter.points en el DOM
   lifeNode.innerHTML = `LIFE : ${mainCharacter.life}`
   pointsNode.innerHTML = `POINTS : 000${mainCharacter.points}`
+
+  //creamos los elementos de audio para las interacciones
+  let batAudioElement = document.createElement("audio")
+  batAudioElement.src = "../resources/audio/bat.mp3"
+  batAudioElement.id = "audio-bat"
+  gameBoxNode.append(batAudioElement)
+  let garlicAudioElement = document.createElement("audio")
+  garlicAudioElement.src = "../resources/audio/badElement.mp3"
+  garlicAudioElement.id = "audio-garlic"
+  gameBoxNode.append(garlicAudioElement)
+  //extraemos los nodos
+  batAudioNode = gameBoxNode.querySelector("#audio-bat");
+  garlicAudioNode = gameBoxNode.querySelector("#audio-garlic");
 
   //el juego 
   //gameLoop()
@@ -89,27 +104,33 @@ function gameLoop(){
 
 function gameOver(){
   //clean the intervals
+  musicGameNode.pause();
   clearInterval(intervalGameLoopId)
   clearInterval(intervalBatsId)
   clearInterval(intervalGarlic)
-  musicGameNode.pause();
+  
   //cleam game-box
   gameBoxNode.innerHTML = ""
   garlicArr = []
   batArr = []
 
+  
+  
   //mostrar texto you Win/ you lose
   if(mainCharacter.life <= 0 ){
     //you lose
     resultNode.innerHTML = `YOU lOSE`
     totalPointsNode.innerHTML = `total points : ${mainCharacter.points}`
+    musicGameOverNode.play()
   } else {
-    resultNode.innerHTML = `YOU lOSE`
+    resultNode.innerHTML = `YOU WIN`
     totalPointsNode.innerHTML = `total points : ${mainCharacter.points}`
+    musicGameWinNode.play()
   }
   //cambiar a la pantalla final
   gameScreenNode.style.display = "none"
   endScreenNode.style.display = "flex"
+  
 }
 
 function restartGame(){
@@ -174,10 +195,11 @@ function detectIfCollWithBat(){
     pointsNode.innerHTML = `POINTS : 0${mainCharacter.points}`
     //borrar el elemento de js y del dom
     batArr[index].node.remove()
-    batArr.splice(index,1);
-    
-    if(mainCharacter.points >= 1000){
-      gameOver();
+    batArr.splice(index,1)
+    batAudioNode.play()
+    if(mainCharacter.points >= 500){
+      setTimeout(gameOver,500);
+      
     }
   } 
 
@@ -201,8 +223,9 @@ function detectIfCollWithGarlic(){
       //borrar el elemento del dom
       garlicArr[index].node.remove()
       garlicArr.splice(index,1);
+      garlicAudioNode.play()
       if(mainCharacter.life === 0){
-        gameOver();
+        setTimeout(gameOver,500);
       }
     } 
 })

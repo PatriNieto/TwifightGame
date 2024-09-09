@@ -5,6 +5,7 @@ class Garlic {
     this.w = 50
     this.h = 50
     this.speed = 2
+    
 
     //inclusion en el DOM
     this.node = document.createElement("img");

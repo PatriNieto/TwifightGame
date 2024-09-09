@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
   <title>Tiwfight</title>
+  <link rel="icon" type="image/x-icon" href="./resources/twifightFavicon2.png">
 </head>
 <body>
 
@@ -33,10 +34,13 @@
   </div>
   <!--END SCREEN-->
   <div id="end-screen" class="container">
+    <audio src="./resources/audio/gameOver.mp3" id="game-over-audio"></audio>
+    <audio src="./resources/audio/gameWin.mp3" id="game-win-audio"></audio>
     <h3>GAME OVER!</h3>
     <h4 id="game-result"></h4>
     <p id="total-points"></p>
     <button id="restart-button">PLAY AGAIN</button>
+    
   </div>
   
 

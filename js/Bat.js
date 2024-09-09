@@ -7,6 +7,7 @@ class Bat {
     this.h = 200
     this.speed = 2
     this.pointsGiven = 100
+    //this.audioOnCollisionSrc = "../resources/audio/goodElement.mp3"
 
 
     //cuando se construye hay que incluirlo en el dom, this.node es este nuevo elemento Bat
