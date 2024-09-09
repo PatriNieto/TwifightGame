@@ -11,6 +11,8 @@ let lifeNode = gameScreenNode.querySelector("#life");
 let pointsNode = gameScreenNode.querySelector("#points");
 let resultNode = endScreenNode.querySelector("#game-result");
 let totalPointsNode = endScreenNode.querySelector("#total-points");
+let musicGameNode = gameScreenNode.querySelector("audio");
+
 //botones
 const startButtonNode = document.querySelector("#start-button");
 const ReStartButtonNode = document.querySelector("#restart-button");
@@ -33,6 +35,7 @@ function startGame(){
 
   startScreenNode.style.display = "none"
   gameScreenNode.style.display = "flex"
+  
 
   //elementos iniciales del juego
   mainCharacter = new MainCharacter()
@@ -62,7 +65,7 @@ function startGame(){
 function gameLoop(){
   //movimiento personaje
   mainCharacter.gravity()
-
+  musicGameNode.play();
   //movimiento elementos
   //bats
   batArr.forEach((eachBat)=>{
@@ -89,7 +92,7 @@ function gameOver(){
   clearInterval(intervalGameLoopId)
   clearInterval(intervalBatsId)
   clearInterval(intervalGarlic)
-
+  musicGameNode.pause();
   //cleam game-box
   gameBoxNode.innerHTML = ""
   garlicArr = []
