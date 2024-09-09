@@ -1,6 +1,6 @@
 class Garlic {
-  constructor(){
-    this.x = gameBoxNode.offsetWidth;
+  constructor(delay){
+    this.x = gameBoxNode.offsetWidth + delay;
     this.y = 550
     this.w = 50
     this.h = 50

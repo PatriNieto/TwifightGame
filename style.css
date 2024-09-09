@@ -24,10 +24,17 @@ body{
   display:none;
   font-size: 3em;
   color: aliceblue;
-  align-content: center;
+  align-content: baseline;
   justify-content: center;
-  align-items: center;
+  align-items: baseline;
   position: relative;
+}
+
+#audio-icon{
+  margin: 0;
+  padding: 0;
+  width: 50px;
+  
 }
 
 #game-box {

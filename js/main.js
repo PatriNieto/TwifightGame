@@ -12,8 +12,11 @@ let pointsNode = gameScreenNode.querySelector("#points");
 let resultNode = endScreenNode.querySelector("#game-result");
 let totalPointsNode = endScreenNode.querySelector("#total-points");
 let musicGameNode = gameScreenNode.querySelector("audio");
+let musicGameButtonNode = gameScreenNode.querySelector("img");
 let musicGameOverNode = endScreenNode.querySelector("#game-over-audio");
 let musicGameWinNode = endScreenNode.querySelector("#game-win-audio");
+let isSound = true
+
 
 //botones
 const startButtonNode = document.querySelector("#start-button");
@@ -22,11 +25,13 @@ const ReStartButtonNode = document.querySelector("#restart-button");
 let mainCharacter = null
 //variable almacen de Bats
 let batArr = []
-//let frecBat = 8000
+let frecBat = 4000
+
 
 //variable almacen de Garlics
 let garlicArr = [] 
-//let frecGarlic = 4000
+let frecGarlic = 4000
+
 
 /* INTERVALOS DEL JUEGO*/ 
 let intervalGameLoopId = null
@@ -64,16 +69,23 @@ function startGame(){
   intervalGameLoopId = setInterval(()=>{
     gameLoop()
   }, Math.round(1000/60));
+  musicGameNode.play();
 
   /* We add the elements */ 
   //add bat elements 
+  
   intervalBatsId = setInterval(()=>{
+    /* let randomFrec = Math.floor(Math.random()*(22000 - 17000) + 17000)
+    batTimeOut = setTimeout(addBat, randomFrec) */
     addBat();
-  }, Math.floor(Math.random()*(10000 - 1000) + 1000));
+  }, frecBat);
   //add garlic elements 
   intervalGarlic = setInterval (()=>{
+    /* let randomFrec2 = Math.floor(Math.random()*(10000 - 5000) + 5000)
+    garlicTimeOut = setTimeout(addGarlic, randomFrec2) */
     addGarlic();
-  }, Math.floor(Math.random()*(20000 - 1000) + 1000));
+    
+  },frecGarlic );
 
   
 }
@@ -81,7 +93,6 @@ function startGame(){
 function gameLoop(){
   //movimiento personaje
   mainCharacter.gravity()
-  musicGameNode.play();
   //movimiento elementos
   //bats
   batArr.forEach((eachBat)=>{
@@ -110,6 +121,8 @@ function gameOver(){
   clearInterval(intervalBatsId)
   clearInterval(intervalGarlic)
   
+  
+  
   //cleam game-box
   gameBoxNode.innerHTML = ""
   garlicArr = []
@@ -137,6 +150,7 @@ function gameOver(){
 function restartGame(){
   endScreenNode.style.display = "none"
   gameScreenNode.style.display = "flex"
+  
   startGame()
 }
 
@@ -145,12 +159,15 @@ function restartGame(){
 /* functions to add the elements */ 
 function addBat(){
   //creamos una nueva variable local para ir añadiendo los elementos bat al array
-  let newBat = new Bat()
+  //calculamos un y random entre uhn salto y dos dedl personaje
+  let posY = Math.floor(Math.random()*300)+ 100
+  let newBat = new Bat(posY)
   batArr.push(newBat);
 }
 
 function addGarlic(){
-  let newGarlic = new Garlic()
+  let delay = Math.floor(Math.random()*700) 
+  let newGarlic = new Garlic(delay)
   garlicArr.push(newGarlic);
   
 }
@@ -200,7 +217,7 @@ function detectIfCollWithBat(){
     batArr.splice(index,1)
     batAudioNode.play()
     if(mainCharacter.points >= 500){
-      setTimeout(gameOver,500);
+      setTimeout(gameOver,200);
       
     }
   } 
@@ -251,6 +268,27 @@ gameBoxNode.addEventListener("click", ()=>{
   mainCharacter.jump();
 });
 
+//sound button musicGameNode
 
-
+musicGameButtonNode.addEventListener("click", ()=>{
+  //hacemos variable de control
+  
+  /* if(musicGameButtonNode.src == "./resources/sound.png"){
+    musicGameButtonNode.src = "./resources/no-sound.png"
+  
+  musicGameNode.pause()
+  } else {
+    
+    musicGameNode.play()
+  } */
+ if(isSound === true){
+  musicGameNode.pause()
+  isSound = false
+  musicGameButtonNode.src = "./resources/no-sound.png"
+ } else {
+  musicGameNode.play()
+  isSound = true
+  musicGameButtonNode.src = "./resources/sound.png"
+ }
+});
 

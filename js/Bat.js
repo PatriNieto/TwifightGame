@@ -1,8 +1,8 @@
 class Bat {
 
-  constructor() {
+  constructor(posY) {
     this.x = gameBoxNode.offsetWidth;
-    this.y = 250
+    this.y = posY
     this.w = 300
     this.h = 200
     this.speed = 2
