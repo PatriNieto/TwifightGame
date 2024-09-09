@@ -44,6 +44,8 @@ class MainCharacter {
   jump() {
     this.y -= this.jumpSpeed
     this.node.style.top = `${this.y}px`
+    
+
   }
 
 

@@ -50,6 +50,7 @@ function startGame(){
   //incluimos mainCharacter.life y mainCharacter.points en el DOM
   lifeNode.innerHTML = `LIFE : ${mainCharacter.life}`
   pointsNode.innerHTML = `POINTS : 000${mainCharacter.points}`
+ 
 
   //creamos los elementos de audio para las interacciones
   let batAudioElement = document.createElement("audio")
@@ -204,10 +205,17 @@ function detectIfCollWithBat(){
   //we compare the mainChar with eachBat on screen to get collisions
   //collision logic from https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
   if (
-    mainCharacter.x < eachBat.x + eachBat.w &&
+    mainCharacter.x < (eachBat.x + eachBat.w/2) &&
+    mainCharacter.x + mainCharacter.w > eachBat.x + eachBat.w/2 &&
+    mainCharacter.y < eachBat.y + eachBat.h/3 &&
+    mainCharacter.y + mainCharacter.h/3 > eachBat.y
+
+
+
+   /*  mainCharacter.x < eachBat.x + eachBat.w &&
     mainCharacter.x + mainCharacter.w > eachBat.x &&
     mainCharacter.y < eachBat.y + eachBat.h &&
-    mainCharacter.y + mainCharacter.h > eachBat.y
+    mainCharacter.y + mainCharacter.h > eachBat.y */
   ) {
     // adjusted points in js and in dom
     mainCharacter.points += eachBat.pointsGiven
@@ -215,9 +223,13 @@ function detectIfCollWithBat(){
     //borrar el elemento de js y del dom
     batArr[index].node.remove()
     batArr.splice(index,1)
+    mainCharacter.node.src = "../resources/mainCharJumpingBatted.gif"
+      setTimeout(()=>{
+      mainCharacter.node.src = "../resources/mainChar.gif"
+      }, 200);
     batAudioNode.play()
     if(mainCharacter.points >= 500){
-      setTimeout(gameOver,200);
+      setTimeout(gameOver, 500);
       
     }
   } 
@@ -230,9 +242,9 @@ function detectIfCollWithGarlic(){
     //we compare the mainChar with eachBat on screen to get collisions
     //collision logic from https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
     if (
-      mainCharacter.x < eachGarlic.x + eachGarlic.w &&
-      mainCharacter.x + mainCharacter.w > eachGarlic.x &&
-      mainCharacter.y < eachGarlic.y + eachGarlic.h &&
+      mainCharacter.x < eachGarlic.x + eachGarlic.w/1.5 &&
+      mainCharacter.x + mainCharacter.w/1.5 > eachGarlic.x &&
+      mainCharacter.y < eachGarlic.y + eachGarlic.h/1.5 &&
       mainCharacter.y + mainCharacter.h > eachGarlic.y
     ) {
       // Collision detected!
@@ -243,9 +255,13 @@ function detectIfCollWithGarlic(){
       garlicArr[index].node.remove()
       garlicArr.splice(index,1);
       garlicAudioNode.play()
+      mainCharacter.node.src = "../resources/mainCharDamaged.gif"
+      setTimeout(()=>{
+      mainCharacter.node.src = "../resources/mainChar.gif"
+      }, 200);
       if(mainCharacter.life === 0){
         setTimeout(gameOver,500);
-      }
+      } 
     } 
 })
 }
@@ -266,21 +282,18 @@ ReStartButtonNode.addEventListener("click", ()=>{
 
 gameBoxNode.addEventListener("click", ()=>{
   mainCharacter.jump();
-});
+  mainCharacter.node.src = "../resources/mainCharJumping.gif"
+  setTimeout(()=>{
+    mainCharacter.node.src = "../resources/mainChar.gif"
+  }, 650);
+  
+}); 
+
 
 //sound button musicGameNode
 
 musicGameButtonNode.addEventListener("click", ()=>{
-  //hacemos variable de control
   
-  /* if(musicGameButtonNode.src == "./resources/sound.png"){
-    musicGameButtonNode.src = "./resources/no-sound.png"
-  
-  musicGameNode.pause()
-  } else {
-    
-    musicGameNode.play()
-  } */
  if(isSound === true){
   musicGameNode.pause()
   isSound = false
