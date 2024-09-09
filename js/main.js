@@ -92,6 +92,8 @@ function gameOver(){
 
   //cleam game-box
   gameBoxNode.innerHTML = ""
+  garlicArr = []
+  batArr = []
 
   //mostrar texto you Win/ you lose
   if(mainCharacter.life <= 0 ){
@@ -110,7 +112,6 @@ function gameOver(){
 function restartGame(){
   endScreenNode.style.display = "none"
   gameScreenNode.style.display = "flex"
-  
   startGame()
 }
 
