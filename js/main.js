@@ -22,10 +22,11 @@ const ReStartButtonNode = document.querySelector("#restart-button");
 let mainCharacter = null
 //variable almacen de Bats
 let batArr = []
-let frecBat = 8000
+//let frecBat = 8000
+
 //variable almacen de Garlics
 let garlicArr = [] 
-let frecGarlic = 4000
+//let frecGarlic = 4000
 
 /* INTERVALOS DEL JUEGO*/ 
 let intervalGameLoopId = null
@@ -68,11 +69,11 @@ function startGame(){
   //add bat elements 
   intervalBatsId = setInterval(()=>{
     addBat();
-  }, frecBat);
+  }, Math.floor(Math.random()*(10000 - 1000) + 1000));
   //add garlic elements 
   intervalGarlic = setInterval (()=>{
     addGarlic();
-  }, frecGarlic);
+  }, Math.floor(Math.random()*(20000 - 1000) + 1000));
 
   
 }
@@ -151,6 +152,7 @@ function addBat(){
 function addGarlic(){
   let newGarlic = new Garlic()
   garlicArr.push(newGarlic);
+  
 }
 
 /* functions to remove the elements when out*/ 
