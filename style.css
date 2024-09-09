@@ -16,8 +16,19 @@ body{
 #start-screen button, #end-screen button {
   font-size: 3em;
   font-family:  'Pixelify Sans',Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  box-shadow: inset 6px 4px 0px 0px rgb(97, 97, 97);
+  box-shadow: 0 12px #999;
 }
 
+#start-screen button:hover, #end-screen button:hover {
+  background-color:azure;
+}
+#start-screen button:active, #end-screen button:active {
+  background-color: rgb(202, 252, 252);
+  box-shadow: 0 6px #b6b6b6;
+
+  transform: translateY(4px);
+}
 
 
 #game-screen {
@@ -87,7 +98,8 @@ body{
 }
 #end-screen button {
   font-size: 2em;
-  font-family:  'Pixelify Sans',Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-family:  'Pixelify Sans', Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  padding: 20px;
 }
 
 .container{
