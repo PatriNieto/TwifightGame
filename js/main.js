@@ -224,23 +224,24 @@ function detectIfCollWithBat(){
     mainCharacter.y + mainCharacter.h > eachBat.y */
   ) {
     // adjusted points in js and in dom
-    mainCharacter.points += eachBat.pointsGiven
-    pointsNode.innerHTML = `POINTS : 0${mainCharacter.points}`
+    
     //borrar el elemento de js y del dom
     batArr[index].node.remove()
     batArr.splice(index,1)
     
-    if(mainCharacter.points === 500){
-      clearTimeout(afterJumpTimeOutId)
+    if(mainCharacter.points === (500-eachBat.pointsGiven)){
+      mainCharacter.points += eachBat.pointsGiven
+      pointsNode.innerHTML = `POINTS : 0${mainCharacter.points}`
       setTimeout(gameOver, 2500);
       musicGameWinNode.play()
-      
+      mainCharacter.node.src = "../resources/mainCharVict.gif"
       gameBoxNode.removeEventListener("click", handleClickJump)
       window.removeEventListener("keydown", handleArrow)
-      
-      mainCharacter.node.src = "../resources/mainCharVict.gif"
+      clearTimeout(afterJumpTimeOutId)
       
     } else if(mainCharacter.points < 500 && mainCharacter.life > 0){
+      mainCharacter.points += eachBat.pointsGiven
+      pointsNode.innerHTML = `POINTS : 0${mainCharacter.points}`
       mainCharacter.node.src = "../resources/mainCharJumpingBatted.gif"
       setTimeout(()=>{
       mainCharacter.node.src = "../resources/mainChar2.gif"
@@ -259,28 +260,28 @@ function detectIfCollWithGarlic(){
       mainCharacter.x < eachGarlic.x + eachGarlic.w/1.5 &&
       mainCharacter.x + mainCharacter.w/1.5 > eachGarlic.x &&
       mainCharacter.y < eachGarlic.y + eachGarlic.h/1.5 &&
-      mainCharacter.y + mainCharacter.h > eachGarlic.y && mainCharacter.points < 500
+      mainCharacter.y + mainCharacter.h > eachGarlic.y
     ) {
       // Collision detected!
       
-        mainCharacter.life -= 20
       
-      
-      lifeNode.innerHTML = `LIFE : 0${mainCharacter.life}`
       //borrar el elemento del dom
       garlicArr[index].node.remove()
       garlicArr.splice(index,1);
       
-      if(mainCharacter.life === 0){
-        clearTimeout(afterJumpTimeOutId)
+      if(mainCharacter.life === 20){
+        mainCharacter.life -= 20
+        lifeNode.innerHTML = `LIFE : 0${mainCharacter.life}`
         setTimeout(gameOver,2500);
         musicGameOverNode.play()
         mainCharacter.node.src = "../resources/mainCharDying3.gif"
         gameBoxNode.removeEventListener("click",handleClickJump)
         window.removeEventListener("keydown", handleArrow)
+        clearTimeout(afterJumpTimeOutId)
         
-        
-      } else {
+      } else if(mainCharacter.life > 0 && mainCharacter.points < 500){
+        mainCharacter.life -= 20
+        lifeNode.innerHTML = `LIFE : 0${mainCharacter.life}`
         garlicAudioNode.play()
         mainCharacter.node.src = "../resources/mainCharDamaged.gif"
         setTimeout(()=>{
@@ -336,7 +337,6 @@ function handleArrow(event){
     case "ArrowUp":
       mainCharacter.jump();
   mainCharacter.node.src = "../resources/mainCharJumpingRe.gif"
- 
   afterJumpTimeOutId = setTimeout(()=>{
     mainCharacter.node.src = "../resources/mainChar2.gif"
   }, 650);
