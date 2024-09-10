@@ -16,6 +16,16 @@ body{
   margin: 20px;
 }
 
+#intro-box {
+  display: none;
+  color:white;
+  font-size: 3em;
+  text-align: center;
+  
+}
+#intro-box img {
+  height: 95vh;
+}
 
 
 #start-screen button, #end-screen button {

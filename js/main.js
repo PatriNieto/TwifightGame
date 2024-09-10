@@ -7,6 +7,7 @@ const startScreenNode = document.querySelector("#start-screen");
 const gameScreenNode = document.querySelector("#game-screen");
 const endScreenNode = document.querySelector("#end-screen");
 const  gameBoxNode = document.querySelector("#game-box");
+const introScreenNode = document.querySelector("#intro-box");
 
 // DOM elements
 let lifeNode = gameScreenNode.querySelector("#life");
@@ -18,7 +19,7 @@ let musicGameButtonNode = gameScreenNode.querySelector("img");
 let musicGameOverNode = endScreenNode.querySelector("#game-over-audio");
 let musicGameWinNode = endScreenNode.querySelector("#game-win-audio");
 let isSound = true
-
+let musicIntroGameNode = introScreenNode.querySelector("audio");
 
 //botones
 const startButtonNode = document.querySelector("#start-button");
@@ -42,10 +43,20 @@ let intervalGarlic = null
 let intervalCross = null
 let afterJumpTimeOutId = null
 
+function startIntro(){
+  startScreenNode.style.display = "none"
+  introScreenNode.style.display = "flex"
+  introScreenNode.querySelector("img").src ="../resources/intro.gif"
+  musicIntroGameNode.src = "../resources/audio/evil-cue-111895.mp3"
+  musicIntroGameNode.play()
+  setTimeout(startGame, 11300);
+  
+}
 
 function startGame(){
 
   startScreenNode.style.display = "none"
+  introScreenNode.style.display = "none"
   gameScreenNode.style.display = "flex"
   
 
@@ -376,7 +387,8 @@ function detectIfCollWithCross(){
 
 /* Add Event Listeners */ 
 startButtonNode.addEventListener("click", ()=>{
-  startGame()
+  startIntro()
+  
 })
 
 ReStartButtonNode.addEventListener("click", ()=>{
