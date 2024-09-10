@@ -1,4 +1,5 @@
-
+/* VARIABLES DE LÓGICA DEL JUEGO */
+let pointsToWin = 200
 /* selectores del DOM */
 //las 3 pantallas principales: 
 const startScreenNode = document.querySelector("#start-screen");
@@ -62,11 +63,9 @@ function startGame(){
   garlicAudioElement.src = "../resources/audio/badElement.mp3"
   garlicAudioElement.id = "audio-garlic"
   gameBoxNode.append(garlicAudioElement)
-  //extraemos los nodos
+
   batAudioNode = gameBoxNode.querySelector("#audio-bat");
   garlicAudioNode = gameBoxNode.querySelector("#audio-garlic");
-
-  //el juego 
 
   //gameLoop()
   intervalGameLoopId = setInterval(()=>{
@@ -78,16 +77,12 @@ function startGame(){
   //add bat elements 
   
   intervalBatsId = setInterval(()=>{
-    /* let randomFrec = Math.floor(Math.random()*(22000 - 17000) + 17000)
-    batTimeOut = setTimeout(addBat, randomFrec) */
     addBat();
   }, frecBat);
+
   //add garlic elements 
   intervalGarlic = setInterval (()=>{
-    /* let randomFrec2 = Math.floor(Math.random()*(10000 - 5000) + 5000)
-    garlicTimeOut = setTimeout(addGarlic, randomFrec2) */
     addGarlic();
-    
   },frecGarlic );
 
   /* mainCharacter jump() */
@@ -97,9 +92,9 @@ window.addEventListener("keydown", handleArrow)
 }
 
 function gameLoop(){
-  //movimiento personaje
+  //mainChar movement
   mainCharacter.gravity()
-  //movimiento elementos
+  //elements movement
   //bats
   batArr.forEach((eachBat)=>{
     eachBat.automaticMovement()
@@ -166,7 +161,7 @@ function restartGame(){
 /* functions to add the elements */ 
 function addBat(){
   //creamos una nueva variable local para ir añadiendo los elementos bat al array
-  //calculamos un y random entre uhn salto y dos dedl personaje
+  //calculamos un y random entre un salto y dos del personaje
   let posY = Math.floor(Math.random()*300)+ 100
   let newBat = new Bat(posY)
   batArr.push(newBat);
@@ -214,7 +209,8 @@ function detectIfCollWithBat(){
     mainCharacter.x < (eachBat.x + eachBat.w/2) &&
     mainCharacter.x + mainCharacter.w > eachBat.x + eachBat.w/2 &&
     mainCharacter.y < eachBat.y + eachBat.h/3 &&
-    mainCharacter.y + mainCharacter.h/3 > eachBat.y
+    mainCharacter.y + mainCharacter.h/3 > eachBat.y &&
+    mainCharacter.life > 0
 
 
 
@@ -229,7 +225,7 @@ function detectIfCollWithBat(){
     batArr[index].node.remove()
     batArr.splice(index,1)
     
-    if(mainCharacter.points === (500-eachBat.pointsGiven)){
+    if(mainCharacter.points === (pointsToWin-eachBat.pointsGiven)){
       mainCharacter.points += eachBat.pointsGiven
       pointsNode.innerHTML = `POINTS : 0${mainCharacter.points}`
       setTimeout(gameOver, 2500);
@@ -239,7 +235,7 @@ function detectIfCollWithBat(){
       window.removeEventListener("keydown", handleArrow)
       clearTimeout(afterJumpTimeOutId)
       
-    } else if(mainCharacter.points < 500 && mainCharacter.life > 0){
+    } else if(mainCharacter.points < pointsToWin && mainCharacter.life > 0){
       mainCharacter.points += eachBat.pointsGiven
       pointsNode.innerHTML = `POINTS : 0${mainCharacter.points}`
       mainCharacter.node.src = "../resources/mainCharJumpingBatted.gif"
@@ -260,7 +256,8 @@ function detectIfCollWithGarlic(){
       mainCharacter.x < eachGarlic.x + eachGarlic.w/1.5 &&
       mainCharacter.x + mainCharacter.w/1.5 > eachGarlic.x &&
       mainCharacter.y < eachGarlic.y + eachGarlic.h/1.5 &&
-      mainCharacter.y + mainCharacter.h > eachGarlic.y
+      mainCharacter.y + mainCharacter.h > eachGarlic.y &&
+      mainCharacter.points < pointsToWin
     ) {
       // Collision detected!
       
@@ -307,12 +304,20 @@ ReStartButtonNode.addEventListener("click", ()=>{
 
 
 function handleClickJump(){
-  if(mainCharacter.y >= 100){mainCharacter.jump();}
-  
-  mainCharacter.node.src = "../resources/mainCharJumpingRe.gif"
+  if(mainCharacter.y >= 100 && mainCharacter.isJumping === false){
+    mainCharacter.jump();
+    mainCharacter.isJumping = true
+    mainCharacter.node.src = "../resources/mainCharJumpingRe.gif"
   afterJumpTimeOutId = setTimeout(()=>{
     mainCharacter.node.src = "../resources/mainChar2.gif"
-  }, 650);
+    mainCharacter.isJumping = false
+  }, 650); 
+  } else {
+    mainCharacter.isJumping = false
+
+  }
+  
+  
 }
 
 
@@ -325,6 +330,7 @@ function handleArrow(event){
         mainCharacter.x +=10
       //lo ajustamos en el DOM
       mainCharacter.node.style.left = `${mainCharacter.x}px`
+      mainCharacter.node.src = "../resources/mainChar2.gif"
       }
       break;
     case "ArrowLeft":
@@ -332,16 +338,25 @@ function handleArrow(event){
         mainCharacter.x -=10
       //lo ajustamos en el DOM
       mainCharacter.node.style.left = `${mainCharacter.x}px`
+      //cambiamos la imagen cuando va para la izquierda
+      mainCharacter.node.src = "../resources/mainCharLeft.gif"
       }
       break;
     case "ArrowUp":
-      mainCharacter.jump();
-  mainCharacter.node.src = "../resources/mainCharJumpingRe.gif"
-  afterJumpTimeOutId = setTimeout(()=>{
-    mainCharacter.node.src = "../resources/mainChar2.gif"
-  }, 650);
-  break;
-  };
+      if(mainCharacter.y >= 100 && mainCharacter.isJumping === false){
+        mainCharacter.jump();
+        mainCharacter.isJumping = true
+        mainCharacter.node.src = "../resources/mainCharJumpingRe.gif"
+        afterJumpTimeOutId = setTimeout(()=>{
+        mainCharacter.node.src = "../resources/mainChar2.gif"
+        mainCharacter.isJumping = true
+      }, 650);
+      }  else {
+        mainCharacter.isJumping = false
+      }
+    
+       break;
+      };
 }
 
 

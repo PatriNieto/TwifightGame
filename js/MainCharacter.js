@@ -9,6 +9,7 @@ class MainCharacter {
     this.points = 0
     this.jumpSpeed = 150
     this.gravityForce = 5
+    this.isJumping = false
 
     //creacion en el DOM del personaje - solo se hará unna vez, al crearlo, por eso en el constructor
     this.node = document.createElement("img");

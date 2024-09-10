@@ -11,6 +11,11 @@ body{
   font-size: 3em;
   text-align: center;
 }
+#start-screen p {
+  line-height: 20px;
+  margin: 20px;
+}
+
 
 
 #start-screen button, #end-screen button {
@@ -18,6 +23,10 @@ body{
   font-family:  'Pixelify Sans',Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
   box-shadow: inset 6px 4px 0px 0px rgb(97, 97, 97);
   box-shadow: 0 12px #999;
+}
+#start-screen button {
+  margin-top: 40px;
+  padding: 20px;
 }
 
 #start-screen button:hover, #end-screen button:hover {
