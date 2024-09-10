@@ -2,8 +2,8 @@ class MainCharacter {
 
   constructor(){
     this.x = 50
-    this.y = 500
-    this.w = 100
+    this.y = 400
+    this.w = 150
     this.h = 100
     this.life = 100
     this.points = 0
@@ -13,7 +13,7 @@ class MainCharacter {
     //creacion en el DOM del personaje - solo se hará unna vez, al crearlo, por eso en el constructor
     this.node = document.createElement("img");
     //cambiamos el src del nuevo elemento
-    this.node.src = "../resources/mainChar.gif"
+    this.node.src = "../resources/mainChar2.gif"
 
     //lo añadimos al DOM 
     gameBoxNode.append(this.node);
@@ -43,8 +43,15 @@ class MainCharacter {
   //el metodo jump cambia la posicion y de nuestro objeto
   //se activara con spacebar 
   jump() {
-    this.y -= this.jumpSpeed
-    this.node.style.top = `${this.y}px`
+      if(this.y > 0){
+        this.y -= this.jumpSpeed
+        this.node.style.top = `${this.y}px`
+      } else {
+        this.y = 0
+      }
+      
+    
+    
     
 
   }

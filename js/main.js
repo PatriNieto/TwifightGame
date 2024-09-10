@@ -37,6 +37,7 @@ let frecGarlic = 4000
 let intervalGameLoopId = null
 let intervalBatsId = null
 let intervalGarlic = null
+let afterJumpTimeOutId = null
 
 
 function startGame(){
@@ -51,7 +52,7 @@ function startGame(){
   lifeNode.innerHTML = `LIFE : ${mainCharacter.life}`
   pointsNode.innerHTML = `POINTS : 000${mainCharacter.points}`
  
-
+  
   //creamos los elementos de audio para las interacciones
   let batAudioElement = document.createElement("audio")
   batAudioElement.src = "../resources/audio/bat.mp3"
@@ -66,6 +67,7 @@ function startGame(){
   garlicAudioNode = gameBoxNode.querySelector("#audio-garlic");
 
   //el juego 
+
   //gameLoop()
   intervalGameLoopId = setInterval(()=>{
     gameLoop()
@@ -88,7 +90,10 @@ function startGame(){
     
   },frecGarlic );
 
-  
+  /* mainCharacter jump() */
+
+gameBoxNode.addEventListener("click", handleClickJump); 
+window.addEventListener("keydown", handleArrow)  
 }
 
 function gameLoop(){
@@ -126,8 +131,10 @@ function gameOver(){
   
   //cleam game-box
   gameBoxNode.innerHTML = ""
+  
   garlicArr = []
   batArr = []
+  musicGameButtonNode.src = "./resources/sound.png";
 
   
   
@@ -136,11 +143,10 @@ function gameOver(){
     //you lose
     resultNode.innerHTML = `YOU lOSE`
     totalPointsNode.innerHTML = `total points : ${mainCharacter.points}`
-    musicGameOverNode.play()
+    
   } else {
     resultNode.innerHTML = `YOU WIN`
     totalPointsNode.innerHTML = `total points : ${mainCharacter.points}`
-    musicGameWinNode.play()
   }
   //cambiar a la pantalla final
   gameScreenNode.style.display = "none"
@@ -223,17 +229,25 @@ function detectIfCollWithBat(){
     //borrar el elemento de js y del dom
     batArr[index].node.remove()
     batArr.splice(index,1)
-    mainCharacter.node.src = "../resources/mainCharJumpingBatted.gif"
+    
+    if(mainCharacter.points === 500){
+      clearTimeout(afterJumpTimeOutId)
+      setTimeout(gameOver, 2500);
+      musicGameWinNode.play()
+      
+      gameBoxNode.removeEventListener("click", handleClickJump)
+      window.removeEventListener("keydown", handleArrow)
+      
+      mainCharacter.node.src = "../resources/mainCharVict.gif"
+      
+    } else if(mainCharacter.points < 500 && mainCharacter.life > 0){
+      mainCharacter.node.src = "../resources/mainCharJumpingBatted.gif"
       setTimeout(()=>{
-      mainCharacter.node.src = "../resources/mainChar.gif"
+      mainCharacter.node.src = "../resources/mainChar2.gif"
       }, 200);
     batAudioNode.play()
-    if(mainCharacter.points >= 500){
-      setTimeout(gameOver, 500);
-      
     }
   } 
-
 })
 }
 function detectIfCollWithGarlic(){
@@ -245,23 +259,34 @@ function detectIfCollWithGarlic(){
       mainCharacter.x < eachGarlic.x + eachGarlic.w/1.5 &&
       mainCharacter.x + mainCharacter.w/1.5 > eachGarlic.x &&
       mainCharacter.y < eachGarlic.y + eachGarlic.h/1.5 &&
-      mainCharacter.y + mainCharacter.h > eachGarlic.y
+      mainCharacter.y + mainCharacter.h > eachGarlic.y && mainCharacter.points < 500
     ) {
       // Collision detected!
       
-      mainCharacter.life -= 20
+        mainCharacter.life -= 20
+      
+      
       lifeNode.innerHTML = `LIFE : 0${mainCharacter.life}`
       //borrar el elemento del dom
       garlicArr[index].node.remove()
       garlicArr.splice(index,1);
-      garlicAudioNode.play()
-      mainCharacter.node.src = "../resources/mainCharDamaged.gif"
-      setTimeout(()=>{
-      mainCharacter.node.src = "../resources/mainChar.gif"
-      }, 200);
+      
       if(mainCharacter.life === 0){
-        setTimeout(gameOver,500);
-      } 
+        clearTimeout(afterJumpTimeOutId)
+        setTimeout(gameOver,2500);
+        musicGameOverNode.play()
+        mainCharacter.node.src = "../resources/mainCharDying3.gif"
+        gameBoxNode.removeEventListener("click",handleClickJump)
+        window.removeEventListener("keydown", handleArrow)
+        
+        
+      } else {
+        garlicAudioNode.play()
+        mainCharacter.node.src = "../resources/mainCharDamaged.gif"
+        setTimeout(()=>{
+        mainCharacter.node.src = "../resources/mainChar2.gif"
+        }, 200);
+      }
     } 
 })
 }
@@ -278,16 +303,21 @@ ReStartButtonNode.addEventListener("click", ()=>{
   restartGame()
 }) 
 
-/* mainCharacter jump() */
 
-window.addEventListener("click", ()=>{
-  mainCharacter.jump();
-  mainCharacter.node.src = "../resources/mainCharJumping.gif"
-  setTimeout(()=>{
-    mainCharacter.node.src = "../resources/mainChar.gif"
+
+function handleClickJump(){
+  if(mainCharacter.y >= 100){mainCharacter.jump();}
+  
+  mainCharacter.node.src = "../resources/mainCharJumpingRe.gif"
+  afterJumpTimeOutId = setTimeout(()=>{
+    mainCharacter.node.src = "../resources/mainChar2.gif"
   }, 650);
-}); 
-window.addEventListener("keydown", (event)=>{
+}
+
+
+
+
+function handleArrow(event){
   switch(event.key){
     case "ArrowRight":
       if(mainCharacter.x <= gameBoxNode.offsetWidth-150){
@@ -305,13 +335,14 @@ window.addEventListener("keydown", (event)=>{
       break;
     case "ArrowUp":
       mainCharacter.jump();
-  mainCharacter.node.src = "../resources/mainCharJumping.gif"
-  setTimeout(()=>{
-    mainCharacter.node.src = "../resources/mainChar.gif"
+  mainCharacter.node.src = "../resources/mainCharJumpingRe.gif"
+ 
+  afterJumpTimeOutId = setTimeout(()=>{
+    mainCharacter.node.src = "../resources/mainChar2.gif"
   }, 650);
   break;
   };
-})
+}
 
 
 //sound button musicGameNode
