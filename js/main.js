@@ -1,5 +1,6 @@
 /* VARIABLES DE LÓGICA DEL JUEGO */
-let pointsToWin = 200
+let pointsToWin = 700
+let pixelsCharMove = 10
 /* selectores del DOM */
 //las 3 pantallas principales: 
 const startScreenNode = document.querySelector("#start-screen");
@@ -27,17 +28,18 @@ let mainCharacter = null
 //variable almacen de Bats
 let batArr = []
 let frecBat = 4000
-
-
 //variable almacen de Garlics
 let garlicArr = [] 
-let frecGarlic = 4000
-
+let frecGarlic = 6000
+//variable almacen de Crosses
+let crossArr = []
+let frecCross = 7000
 
 /* INTERVALOS DEL JUEGO*/ 
 let intervalGameLoopId = null
 let intervalBatsId = null
 let intervalGarlic = null
+let intervalCross = null
 let afterJumpTimeOutId = null
 
 
@@ -63,7 +65,7 @@ function startGame(){
   garlicAudioElement.src = "../resources/audio/badElement.mp3"
   garlicAudioElement.id = "audio-garlic"
   gameBoxNode.append(garlicAudioElement)
-
+//aqui tengo que añadir el audio de cross
   batAudioNode = gameBoxNode.querySelector("#audio-bat");
   garlicAudioNode = gameBoxNode.querySelector("#audio-garlic");
 
@@ -71,6 +73,7 @@ function startGame(){
   intervalGameLoopId = setInterval(()=>{
     gameLoop()
   }, Math.round(1000/60));
+  musicGameNode.load();
   musicGameNode.play();
 
   /* We add the elements */ 
@@ -84,6 +87,11 @@ function startGame(){
   intervalGarlic = setInterval (()=>{
     addGarlic();
   },frecGarlic );
+
+  //add cross elements
+  intervalCross =  setInterval (()=>{
+    addCross();
+  },frecCross );
 
   /* mainCharacter jump() */
 
@@ -102,16 +110,21 @@ function gameLoop(){
   garlicArr.forEach((eachGarlic)=>{
     eachGarlic.automaticMovement()
   });
+  crossArr.forEach((eachCross)=>{
+    eachCross.automaticMovement()
+  });
 
   /* detectar salida de elementos para no sobrecargar el sistema  
   estas funciones serán implementados en este main */ 
   detectIfBatOut()
   detectIfGarlicOut()
+  detectIfCrossOut()
 
   /* detectar colisiones para quitar vida o dar puntos 
   estas funciones serán implementados en este main */ 
   detectIfCollWithBat()
   detectIfCollWithGarlic()
+  detectIfCollWithCross()
 
 }
 
@@ -121,6 +134,7 @@ function gameOver(){
   clearInterval(intervalGameLoopId)
   clearInterval(intervalBatsId)
   clearInterval(intervalGarlic)
+  clearInterval(intervalCross)
   
   
   
@@ -129,6 +143,7 @@ function gameOver(){
   
   garlicArr = []
   batArr = []
+  crossArr = []
   musicGameButtonNode.src = "./resources/sound.png";
 
   
@@ -171,7 +186,12 @@ function addGarlic(){
   let delay = Math.floor(Math.random()*700) 
   let newGarlic = new Garlic(delay)
   garlicArr.push(newGarlic);
-  
+}
+
+function addCross(){
+  let delay = Math.floor(Math.random()*500) 
+  let newCross = new Cross(delay)
+  crossArr.push(newCross);
 }
 
 /* functions to remove the elements when out*/ 
@@ -196,6 +216,18 @@ function detectIfGarlicOut(){
     garlicArr[0].node.remove()
     //we remove it from js
     garlicArr.shift();
+    
+  }
+}
+function detectIfCrossOut(){
+  if(crossArr.length === 0){
+    return
+  }
+  if(crossArr[0].x + crossArr[0].w <= 0){
+    //we reove it from the dom
+    crossArr[0].node.remove()
+    //we remove it from js
+    crossArr.shift();
     
   }
 }
@@ -229,6 +261,8 @@ function detectIfCollWithBat(){
       mainCharacter.points += eachBat.pointsGiven
       pointsNode.innerHTML = `POINTS : 0${mainCharacter.points}`
       setTimeout(gameOver, 2500);
+      
+      musicGameWinNode.load()
       musicGameWinNode.play()
       mainCharacter.node.src = "../resources/mainCharVict.gif"
       gameBoxNode.removeEventListener("click", handleClickJump)
@@ -242,7 +276,8 @@ function detectIfCollWithBat(){
       setTimeout(()=>{
       mainCharacter.node.src = "../resources/mainChar2.gif"
       }, 200);
-    batAudioNode.play()
+      batAudioNode.load()
+      batAudioNode.play()
     }
   } 
 })
@@ -261,14 +296,60 @@ function detectIfCollWithGarlic(){
     ) {
       // Collision detected!
       
-      
+      let damage = garlicArr[index].damage
       //borrar el elemento del dom
       garlicArr[index].node.remove()
       garlicArr.splice(index,1);
       
-      if(mainCharacter.life === 20){
-        mainCharacter.life -= 20
-        lifeNode.innerHTML = `LIFE : 0${mainCharacter.life}`
+      if (mainCharacter.isDead === false){
+        if(mainCharacter.life === damage|| mainCharacter.life < damage){
+          mainCharacter.life -= damage
+          mainCharacter.isDead = true
+          lifeNode.innerHTML = `LIFE : 000`
+          setTimeout(gameOver,2500);
+          musicGameOverNode.play()
+          mainCharacter.node.src = "../resources/mainCharDying3.gif"
+          gameBoxNode.removeEventListener("click",handleClickJump)
+          window.removeEventListener("keydown", handleArrow)
+          clearTimeout(afterJumpTimeOutId)
+          
+        } else if(mainCharacter.life > 0 && mainCharacter.points < 500){
+          mainCharacter.life -= damage
+          lifeNode.innerHTML = `LIFE : 0${mainCharacter.life}`
+          garlicAudioNode.load()
+          garlicAudioNode.play()
+          mainCharacter.node.src = "../resources/mainCharDamaged.gif"
+          setTimeout(()=>{
+          mainCharacter.node.src = "../resources/mainChar2.gif"
+          }, 200);
+      }
+      }
+     } 
+})
+}
+function detectIfCollWithCross(){
+ //we do a forEach to get to eachCross
+ crossArr.forEach((eachCross, index)=>{
+  //we compare the mainChar with eachBat on screen to get collisions
+  //collision logic from https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
+  if (
+    mainCharacter.x < eachCross.x + eachCross.w/2 &&
+    mainCharacter.x + mainCharacter.w/2 > eachCross.x &&
+    mainCharacter.y < eachCross.y + eachCross.h/2 &&
+    mainCharacter.y + mainCharacter.h > eachCross.y &&
+    mainCharacter.points < pointsToWin
+  ) {
+    // Collision detected!
+    
+    let damage = crossArr[index].damage
+    //borrar el elemento del dom
+    crossArr[index].node.remove()
+    crossArr.splice(index,1);
+    if (mainCharacter.isDead === false){
+      if(mainCharacter.life === damage || mainCharacter.life < damage){
+        mainCharacter.life -= damage
+        mainCharacter.isDead = true
+        lifeNode.innerHTML = `LIFE : 000`
         setTimeout(gameOver,2500);
         musicGameOverNode.play()
         mainCharacter.node.src = "../resources/mainCharDying3.gif"
@@ -277,7 +358,7 @@ function detectIfCollWithGarlic(){
         clearTimeout(afterJumpTimeOutId)
         
       } else if(mainCharacter.life > 0 && mainCharacter.points < 500){
-        mainCharacter.life -= 20
+        mainCharacter.life -= damage
         lifeNode.innerHTML = `LIFE : 0${mainCharacter.life}`
         garlicAudioNode.play()
         mainCharacter.node.src = "../resources/mainCharDamaged.gif"
@@ -285,10 +366,11 @@ function detectIfCollWithGarlic(){
         mainCharacter.node.src = "../resources/mainChar2.gif"
         }, 200);
       }
-    } 
+    }
+    
+  } 
 })
 }
-
 
                            /*     SCREEN CHANGES  */
 
@@ -327,15 +409,15 @@ function handleArrow(event){
   switch(event.key){
     case "ArrowRight":
       if(mainCharacter.x <= gameBoxNode.offsetWidth-150){
-        mainCharacter.x +=10
+        mainCharacter.x += pixelsCharMove
       //lo ajustamos en el DOM
       mainCharacter.node.style.left = `${mainCharacter.x}px`
       mainCharacter.node.src = "../resources/mainChar2.gif"
       }
       break;
     case "ArrowLeft":
-      if(mainCharacter.x >= 100){
-        mainCharacter.x -=10
+      if(mainCharacter.x >= 0){
+        mainCharacter.x -= pixelsCharMove
       //lo ajustamos en el DOM
       mainCharacter.node.style.left = `${mainCharacter.x}px`
       //cambiamos la imagen cuando va para la izquierda

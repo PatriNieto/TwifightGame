@@ -6,6 +6,7 @@ class Garlic {
     this.w = 50
     this.h = 50
     this.speed = 2
+    this.damage = 10
     
 
     //inclusion en el DOM
