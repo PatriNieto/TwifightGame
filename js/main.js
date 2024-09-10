@@ -20,7 +20,7 @@ let musicGameOverNode = endScreenNode.querySelector("#game-over-audio");
 let musicGameWinNode = endScreenNode.querySelector("#game-win-audio");
 let isSound = true
 let musicIntroGameNode = introScreenNode.querySelector("audio");
-
+let lifeBarNode = gameScreenNode.querySelector("#life-bar");
 //botones
 const startButtonNode = document.querySelector("#start-button");
 const ReStartButtonNode = document.querySelector("#restart-button");
@@ -156,6 +156,7 @@ function gameOver(){
   batArr = []
   crossArr = []
   musicGameButtonNode.src = "./resources/sound.png";
+  lifeBarNode.src = "./resources/life1.png";
 
   
   
@@ -320,13 +321,22 @@ function detectIfCollWithGarlic(){
           setTimeout(gameOver,2500);
           musicGameOverNode.play()
           mainCharacter.node.src = "../resources/mainCharDying3.gif"
+          
           gameBoxNode.removeEventListener("click",handleClickJump)
           window.removeEventListener("keydown", handleArrow)
           clearTimeout(afterJumpTimeOutId)
+          lifeBarNode.src = "../resources/life5.png"
           
-        } else if(mainCharacter.life > 0 && mainCharacter.points < 500){
+        } else if(mainCharacter.life > 0 && mainCharacter.points < pointsToWin){
           mainCharacter.life -= damage
           lifeNode.innerHTML = `LIFE : 0${mainCharacter.life}`
+          if(mainCharacter.life <= 75 && mainCharacter.life > 50){
+            lifeBarNode.src = "../resources/life2.png"
+          } else if (mainCharacter.life <= 50 && mainCharacter.life > 25) {
+            lifeBarNode.src = "../resources/life3.png"
+          } else if (mainCharacter.life <= 25){
+            lifeBarNode.src = "../resources/life4.png"
+          }
           garlicAudioNode.load()
           garlicAudioNode.play()
           mainCharacter.node.src = "../resources/mainCharDamaged.gif"
@@ -367,10 +377,19 @@ function detectIfCollWithCross(){
         gameBoxNode.removeEventListener("click",handleClickJump)
         window.removeEventListener("keydown", handleArrow)
         clearTimeout(afterJumpTimeOutId)
+        lifeBarNode.src = "../resources/life5.png"
+
         
-      } else if(mainCharacter.life > 0 && mainCharacter.points < 500){
+      } else if(mainCharacter.life > 0 && mainCharacter.points <  pointsToWin){
         mainCharacter.life -= damage
         lifeNode.innerHTML = `LIFE : 0${mainCharacter.life}`
+        if(mainCharacter.life <= 75 && mainCharacter.life > 50 ){
+          lifeBarNode.src = "../resources/life2.png"
+        } else if (mainCharacter.life <= 50 && mainCharacter.life > 25) {
+          lifeBarNode.src = "../resources/life3.png"
+        } else if (mainCharacter.life <= 25){
+          lifeBarNode.src = "../resources/life4.png"
+        }
         garlicAudioNode.play()
         mainCharacter.node.src = "../resources/mainCharDamaged.gif"
         setTimeout(()=>{

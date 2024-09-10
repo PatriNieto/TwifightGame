@@ -86,7 +86,7 @@ body{
   
 }
 
-#info{
+#info, #info-graphic {
   display: flex;
   text-align: center;
   align-items: center;
@@ -94,6 +94,10 @@ body{
   justify-content: space-between;
   margin: auto;
  
+}
+#info-graphic img {
+  width: 250px;
+  padding-top: 15px;
 }
 
 #info p{
