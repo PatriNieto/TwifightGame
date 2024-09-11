@@ -46,8 +46,8 @@ let afterJumpTimeOutId = null
 function startIntro(){
   startScreenNode.style.display = "none"
   introScreenNode.style.display = "flex"
-  introScreenNode.querySelector("img").src ="../resources/intro.gif"
-  musicIntroGameNode.src = "../resources/audio/evil-cue-111895.mp3"
+  introScreenNode.querySelector("img").src ="./resources/intro.gif"
+  musicIntroGameNode.src = "./resources/audio/evil-cue-111895.mp3"
   musicIntroGameNode.play()
   setTimeout(startGame, 11300);
   
@@ -69,14 +69,13 @@ function startGame(){
   
   //creamos los elementos de audio para las interacciones
   let batAudioElement = document.createElement("audio")
-  batAudioElement.src = "../resources/audio/bat.mp3"
+  batAudioElement.src = "./resources/audio/bat.mp3"
   batAudioElement.id = "audio-bat"
   gameBoxNode.append(batAudioElement)
   let garlicAudioElement = document.createElement("audio")
-  garlicAudioElement.src = "../resources/audio/badElement.mp3"
+  garlicAudioElement.src = "./resources/audio/badElement.mp3"
   garlicAudioElement.id = "audio-garlic"
   gameBoxNode.append(garlicAudioElement)
-//aqui tengo que añadir el audio de cross
   batAudioNode = gameBoxNode.querySelector("#audio-bat");
   garlicAudioNode = gameBoxNode.querySelector("#audio-garlic");
 
@@ -197,6 +196,7 @@ function addBat(){
 function addGarlic(){
   let delay = Math.floor(Math.random()*700) 
   let newGarlic = new Garlic(delay)
+  
   garlicArr.push(newGarlic);
 }
 
@@ -276,7 +276,7 @@ function detectIfCollWithBat(){
       
       musicGameWinNode.load()
       musicGameWinNode.play()
-      mainCharacter.node.src = "../resources/mainCharVict.gif"
+      mainCharacter.node.src = "./resources/mainCharVict.gif"
       gameBoxNode.removeEventListener("click", handleClickJump)
       window.removeEventListener("keydown", handleArrow)
       clearTimeout(afterJumpTimeOutId)
@@ -284,9 +284,9 @@ function detectIfCollWithBat(){
     } else if(mainCharacter.points < pointsToWin && mainCharacter.life > 0){
       mainCharacter.points += eachBat.pointsGiven
       pointsNode.innerHTML = `POINTS : 0${mainCharacter.points}`
-      mainCharacter.node.src = "../resources/mainCharJumpingBatted.gif"
+      mainCharacter.node.src = "./resources/mainCharJumpingBatted.gif"
       setTimeout(()=>{
-      mainCharacter.node.src = "../resources/mainChar2.gif"
+      mainCharacter.node.src = "./resources/mainChar2.gif"
       }, 200);
       batAudioNode.load()
       batAudioNode.play()
@@ -320,28 +320,28 @@ function detectIfCollWithGarlic(){
           lifeNode.innerHTML = `LIFE : 000`
           setTimeout(gameOver,2500);
           musicGameOverNode.play()
-          mainCharacter.node.src = "../resources/mainCharDying3.gif"
+          mainCharacter.node.src = "./resources/mainCharDying3.gif"
           
           gameBoxNode.removeEventListener("click",handleClickJump)
           window.removeEventListener("keydown", handleArrow)
           clearTimeout(afterJumpTimeOutId)
-          lifeBarNode.src = "../resources/life5.png"
+          lifeBarNode.src = "./resources/life5.png"
           
         } else if(mainCharacter.life > 0 && mainCharacter.points < pointsToWin){
           mainCharacter.life -= damage
           lifeNode.innerHTML = `LIFE : 0${mainCharacter.life}`
           if(mainCharacter.life <= 75 && mainCharacter.life > 50){
-            lifeBarNode.src = "../resources/life2.png"
+            lifeBarNode.src = "./resources/life2.png"
           } else if (mainCharacter.life <= 50 && mainCharacter.life > 25) {
-            lifeBarNode.src = "../resources/life3.png"
+            lifeBarNode.src = "./resources/life3.png"
           } else if (mainCharacter.life <= 25){
-            lifeBarNode.src = "../resources/life4.png"
+            lifeBarNode.src = "./resources/life4.png"
           }
           garlicAudioNode.load()
           garlicAudioNode.play()
-          mainCharacter.node.src = "../resources/mainCharDamaged.gif"
+          mainCharacter.node.src = "./resources/mainCharDamaged.gif"
           setTimeout(()=>{
-          mainCharacter.node.src = "../resources/mainChar2.gif"
+          mainCharacter.node.src = "./resources/mainChar2.gif"
           }, 200);
       }
       }
@@ -373,27 +373,27 @@ function detectIfCollWithCross(){
         lifeNode.innerHTML = `LIFE : 000`
         setTimeout(gameOver,2500);
         musicGameOverNode.play()
-        mainCharacter.node.src = "../resources/mainCharDying3.gif"
+        mainCharacter.node.src = "./resources/mainCharDying3.gif"
         gameBoxNode.removeEventListener("click",handleClickJump)
         window.removeEventListener("keydown", handleArrow)
         clearTimeout(afterJumpTimeOutId)
-        lifeBarNode.src = "../resources/life5.png"
+        lifeBarNode.src = "./resources/life5.png"
 
         
       } else if(mainCharacter.life > 0 && mainCharacter.points <  pointsToWin){
         mainCharacter.life -= damage
         lifeNode.innerHTML = `LIFE : 0${mainCharacter.life}`
         if(mainCharacter.life <= 75 && mainCharacter.life > 50 ){
-          lifeBarNode.src = "../resources/life2.png"
+          lifeBarNode.src = "./resources/life2.png"
         } else if (mainCharacter.life <= 50 && mainCharacter.life > 25) {
-          lifeBarNode.src = "../resources/life3.png"
+          lifeBarNode.src = "./resources/life3.png"
         } else if (mainCharacter.life <= 25){
-          lifeBarNode.src = "../resources/life4.png"
+          lifeBarNode.src = "./resources/life4.png"
         }
         garlicAudioNode.play()
-        mainCharacter.node.src = "../resources/mainCharDamaged.gif"
+        mainCharacter.node.src = "./resources/mainCharDamaged.gif"
         setTimeout(()=>{
-        mainCharacter.node.src = "../resources/mainChar2.gif"
+        mainCharacter.node.src = "./resources/mainChar2.gif"
         }, 200);
       }
     }
@@ -420,9 +420,9 @@ function handleClickJump(){
   if(mainCharacter.y >= 100 && mainCharacter.isJumping === false){
     mainCharacter.jump();
     mainCharacter.isJumping = true
-    mainCharacter.node.src = "../resources/mainCharJumpingRe.gif"
+    mainCharacter.node.src = "./resources/mainCharJumpingRe.gif"
   afterJumpTimeOutId = setTimeout(()=>{
-    mainCharacter.node.src = "../resources/mainChar2.gif"
+    mainCharacter.node.src = "./resources/mainChar2.gif"
     mainCharacter.isJumping = false
   }, 650); 
   } else {
@@ -443,7 +443,7 @@ function handleArrow(event){
         mainCharacter.x += pixelsCharMove
       //lo ajustamos en el DOM
       mainCharacter.node.style.left = `${mainCharacter.x}px`
-      mainCharacter.node.src = "../resources/mainChar2.gif"
+      mainCharacter.node.src = "./resources/mainChar2.gif"
       }
       break;
     case "ArrowLeft":
@@ -452,16 +452,16 @@ function handleArrow(event){
       //lo ajustamos en el DOM
       mainCharacter.node.style.left = `${mainCharacter.x}px`
       //cambiamos la imagen cuando va para la izquierda
-      mainCharacter.node.src = "../resources/mainCharLeft.gif"
+      mainCharacter.node.src = "./resources/mainCharLeft.gif"
       }
       break;
     case "ArrowUp":
       if(mainCharacter.y >= 100 && mainCharacter.isJumping === false){
         mainCharacter.jump();
         mainCharacter.isJumping = true
-        mainCharacter.node.src = "../resources/mainCharJumpingRe.gif"
+        mainCharacter.node.src = "./resources/mainCharJumpingRe.gif"
         afterJumpTimeOutId = setTimeout(()=>{
-        mainCharacter.node.src = "../resources/mainChar2.gif"
+        mainCharacter.node.src = "./resources/mainChar2.gif"
         mainCharacter.isJumping = true
       }, 650);
       }  else {

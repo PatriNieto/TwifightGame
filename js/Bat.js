@@ -13,7 +13,7 @@ class Bat {
     //cuando se construye hay que incluirlo en el dom, this.node es este nuevo elemento Bat
     this.node = document.createElement("img");
     //incluimos la imagen en el elemento creado
-    this.node.src = "../resources/morcego.gif"
+    this.node.src = "./resources/morcego.gif"
 
     //lo incluimos en el nodo gameBox donde se desarrolla el juego
     gameBoxNode.append(this.node);

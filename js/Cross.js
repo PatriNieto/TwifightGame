@@ -14,7 +14,7 @@ class Cross extends Garlic {
 
     //inclusion en el DOM
    
-    this.node.src = "../resources/grave.png"
+    this.node.src = "./resources/grave.png"
     // lo incluimos en el nodo gameBox donde se desarrolla el juego
     //gameBoxNode.append(this.node);
     this.node.style.width = `${this.w}px`

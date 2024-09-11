@@ -73,7 +73,7 @@ body{
   height: 600px;
   text-align: center;
   margin: auto;
-  background-image: url("./resources/Background/2layers.png");
+  background-image: url("../resources/Background/2layers.png");
   background-repeat: no-repeat;
   background-size: cover;
   border: 1px solid white;

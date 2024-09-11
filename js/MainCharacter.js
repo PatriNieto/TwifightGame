@@ -15,7 +15,7 @@ class MainCharacter {
     //creacion en el DOM del personaje - solo se hará unna vez, al crearlo, por eso en el constructor
     this.node = document.createElement("img");
     //cambiamos el src del nuevo elemento
-    this.node.src = "../resources/mainChar2.gif"
+    this.node.src = "./resources/mainChar2.gif"
 
     //lo añadimos al DOM 
     gameBoxNode.append(this.node);

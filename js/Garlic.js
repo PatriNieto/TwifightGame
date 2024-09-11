@@ -11,7 +11,7 @@ class Garlic {
 
     //inclusion en el DOM
     this.node = document.createElement("img");
-    this.node.src = "../resources/ajo.png"
+    this.node.src = "./resources/ajo.png"
     // lo incluimos en el nodo gameBox donde se desarrolla el juego
     gameBoxNode.append(this.node);
     this.node.style.width = `${this.w}px`
