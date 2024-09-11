@@ -1,4 +1,5 @@
 /* VARIABLES DE LÓGICA DEL JUEGO */
+/* audioNode.volume = 0.1 o audioNode.volume = 0.05*/ 
 let pointsToWin = 700
 let pixelsCharMove = 10
 /* selectores del DOM */
@@ -8,6 +9,7 @@ const gameScreenNode = document.querySelector("#game-screen");
 const endScreenNode = document.querySelector("#end-screen");
 const  gameBoxNode = document.querySelector("#game-box");
 const introScreenNode = document.querySelector("#intro-box");
+const outroScreenNode = document.querySelector("#outro-screen");
 
 // DOM elements
 let lifeNode = gameScreenNode.querySelector("#life");
@@ -94,7 +96,10 @@ function startGame(){
 
   //cloud elements
   intervalCloud = setInterval(()=>{
+    //accedemos al src de la imagen 
+
     addCloud()
+
   }, frecClouds)
   //add bat elements 
   
@@ -179,14 +184,22 @@ function gameOver(){
     //you lose
     resultNode.innerHTML = `YOU lOSE`
     totalPointsNode.innerHTML = `total points : ${mainCharacter.points}`
+    gameScreenNode.style.display = "none"
+    endScreenNode.style.display = "flex"
     
   } else {
     resultNode.innerHTML = `YOU WIN`
     totalPointsNode.innerHTML = `total points : ${mainCharacter.points}`
+    gameScreenNode.style.display = "none"
+    outroScreenNode.style.display = "flex"
+    outroScreenNode.querySelector("img").src= "./resources/outro.gif"
+    setTimeout(()=>{
+      outroScreenNode.style.display = "none"
+      endScreenNode.style.display = "flex"
+    },2600)
+    
   }
-  //cambiar a la pantalla final
-  gameScreenNode.style.display = "none"
-  endScreenNode.style.display = "flex"
+  
   
 }
 
