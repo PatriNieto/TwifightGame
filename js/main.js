@@ -35,12 +35,16 @@ let frecGarlic = 6000
 //variable almacen de Crosses
 let crossArr = []
 let frecCross = 7000
+//variable almacen nubes
+let cloudsArr = []
+let frecClouds = 3000
 
 /* INTERVALOS DEL JUEGO*/ 
 let intervalGameLoopId = null
 let intervalBatsId = null
 let intervalGarlic = null
 let intervalCross = null
+let intervalCloud = null
 let afterJumpTimeOutId = null
 
 function startIntro(){
@@ -87,6 +91,11 @@ function startGame(){
   musicGameNode.play();
 
   /* We add the elements */ 
+
+  //cloud elements
+  intervalCloud = setInterval(()=>{
+    addCloud()
+  }, frecClouds)
   //add bat elements 
   
   intervalBatsId = setInterval(()=>{
@@ -113,6 +122,9 @@ function gameLoop(){
   //mainChar movement
   mainCharacter.gravity()
   //elements movement
+  cloudsArr.forEach((eachCloud)=>{
+    eachCloud.automaticMovement()
+  })
   //bats
   batArr.forEach((eachBat)=>{
     eachBat.automaticMovement()
@@ -126,9 +138,11 @@ function gameLoop(){
 
   /* detectar salida de elementos para no sobrecargar el sistema  
   estas funciones serán implementados en este main */ 
+  detectIfCloudOut()
   detectIfBatOut()
   detectIfGarlicOut()
   detectIfCrossOut()
+  
 
   /* detectar colisiones para quitar vida o dar puntos 
   estas funciones serán implementados en este main */ 
@@ -142,6 +156,7 @@ function gameOver(){
   //clean the intervals
   musicGameNode.pause();
   clearInterval(intervalGameLoopId)
+  clearInterval(intervalCloud)
   clearInterval(intervalBatsId)
   clearInterval(intervalGarlic)
   clearInterval(intervalCross)
@@ -150,7 +165,7 @@ function gameOver(){
   
   //cleam game-box
   gameBoxNode.innerHTML = ""
-  
+  cloudsArr = []
   garlicArr = []
   batArr = []
   crossArr = []
@@ -185,6 +200,11 @@ function restartGame(){
                           /*   -------  function definitions  ---------  */ 
 
 /* functions to add the elements */ 
+function addCloud(){
+  let posY = Math.floor(Math.random()*300)
+  let newCloud = new Cloud(posY)
+  cloudsArr.push(newCloud)
+}
 function addBat(){
   //creamos una nueva variable local para ir añadiendo los elementos bat al array
   //calculamos un y random entre un salto y dos del personaje
@@ -207,6 +227,18 @@ function addCross(){
 }
 
 /* functions to remove the elements when out*/ 
+function detectIfCloudOut(){
+  if(cloudsArr.length === 0){
+    return
+  }
+  if(cloudsArr[0].x + cloudsArr[0].w <= 0){
+    //we reove it from the dom
+    cloudsArr[0].node.remove()
+    //we remove it from js
+    cloudsArr.shift();
+
+  }
+}
 function detectIfBatOut(){
   if(batArr.length === 0){
     return
@@ -479,6 +511,7 @@ musicGameButtonNode.addEventListener("click", ()=>{
   
  if(isSound === true){
   musicGameNode.pause()
+  musicIntroGameNode.pause()
   isSound = false
   musicGameButtonNode.src = "./resources/no-sound.png"
  } else {
