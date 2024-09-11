@@ -39,7 +39,7 @@ let crossArr = []
 let frecCross = 7000
 //variable almacen nubes
 let cloudsArr = []
-let frecClouds = 3000
+let frecClouds = 15000
 
 /* INTERVALOS DEL JUEGO*/ 
 let intervalGameLoopId = null

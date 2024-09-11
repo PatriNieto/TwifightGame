@@ -4,7 +4,7 @@ class Cloud {
     this.y= posY
     this.w = 200 //175
     this.h = 76 //75
-    this.speed = 2
+    this.speed = 0.5
   
 
     //construccion e el dom 
