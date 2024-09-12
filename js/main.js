@@ -1,7 +1,9 @@
 /* VARIABLES DE LÓGICA DEL JUEGO */
-/* audioNode.volume = 0.1 o audioNode.volume = 0.05*/ 
 let pointsToWin = 700
 let pixelsCharMove = 10
+let lifeLimitToBack = 50
+let maxlifeCharacter = 100
+pixelsSpaceForNewBloodCup = 2000
 /* selectores del DOM */
 //las 3 pantallas principales: 
 const startScreenNode = document.querySelector("#start-screen");
@@ -17,11 +19,15 @@ let pointsNode = gameScreenNode.querySelector("#points");
 let resultNode = endScreenNode.querySelector("#game-result");
 let totalPointsNode = endScreenNode.querySelector("#total-points");
 let musicGameNode = gameScreenNode.querySelector("audio");
+musicGameNode.volume = 0.1
 let musicGameButtonNode = gameScreenNode.querySelector("img");
 let musicGameOverNode = endScreenNode.querySelector("#game-over-audio");
+musicGameOverNode.volume = 0.1
 let musicGameWinNode = endScreenNode.querySelector("#game-win-audio");
+musicGameWinNode.volume = 0.1
 let isSound = true
 let musicIntroGameNode = introScreenNode.querySelector("audio");
+musicIntroGameNode.volume = 0.1
 let lifeBarNode = gameScreenNode.querySelector("#life-bar");
 //botones
 const startButtonNode = document.querySelector("#start-button");
@@ -40,6 +46,9 @@ let frecCross = 7000
 //variable almacen nubes
 let cloudsArr = []
 let frecClouds = 15000
+//variable almacen bloodCup, solo quiero tener una 
+let bloodCup = null
+
 
 /* INTERVALOS DEL JUEGO*/ 
 let intervalGameLoopId = null
@@ -47,13 +56,16 @@ let intervalBatsId = null
 let intervalGarlic = null
 let intervalCross = null
 let intervalCloud = null
+//let intervalCups = null
 let afterJumpTimeOutId = null
+
 
 function startIntro(){
   startScreenNode.style.display = "none"
   introScreenNode.style.display = "flex"
   introScreenNode.querySelector("img").src ="./resources/intro.gif"
   musicIntroGameNode.src = "./resources/audio/evil-cue-111895.mp3"
+  musicIntroGameNode.volume = 0.1
   musicIntroGameNode.play()
   setTimeout(startGame, 11300);
   
@@ -78,13 +90,21 @@ function startGame(){
   batAudioElement.src = "./resources/audio/bat.mp3"
   batAudioElement.id = "audio-bat"
   gameBoxNode.append(batAudioElement)
-  let garlicAudioElement = document.createElement("audio")
-  garlicAudioElement.src = "./resources/audio/badElement.mp3"
-  garlicAudioElement.id = "audio-garlic"
-  gameBoxNode.append(garlicAudioElement)
+  let badElementAudioElement = document.createElement("audio")
+  badElementAudioElement.src = "./resources/audio/badElement.mp3"
+  badElementAudioElement.id = "audio-garlic"
+  gameBoxNode.append(badElementAudioElement)
+  let cupAudioElement = document.createElement("audio")
+  cupAudioElement.src = "./resources/audio/life-charger.mp3"
+  cupAudioElement.id = "audio-cup"
+  gameBoxNode.append(cupAudioElement)
   batAudioNode = gameBoxNode.querySelector("#audio-bat");
-  garlicAudioNode = gameBoxNode.querySelector("#audio-garlic");
-
+  batAudioNode.volume = 0.1
+  badElementAudioNode = gameBoxNode.querySelector("#audio-garlic");
+  badElementAudioNode.volume = 0.1
+  cupAudioAudioNode = gameBoxNode.querySelector("#audio-cup");
+  cupAudioAudioNode.volume = 0.1
+  
   //gameLoop()
   intervalGameLoopId = setInterval(()=>{
     gameLoop()
@@ -116,9 +136,9 @@ function startGame(){
   intervalCross =  setInterval (()=>{
     addCross();
   },frecCross );
-
+//add cup - lo hacemos un poco diferente ya que no vamos a tener un array, sino un único objeto que solo se moverá cuandolan vida bje de 50 y una sola vgez
+  bloodCup = new BloodCup()
   /* mainCharacter jump() */
-
 gameBoxNode.addEventListener("click", handleClickJump); 
 window.addEventListener("keydown", handleArrow)  
 }
@@ -140,6 +160,10 @@ function gameLoop(){
   crossArr.forEach((eachCross)=>{
     eachCross.automaticMovement()
   });
+  if(mainCharacter.life < lifeLimitToBack && (bloodCup)){
+    bloodCup.automaticMovement()
+  }
+
 
   /* detectar salida de elementos para no sobrecargar el sistema  
   estas funciones serán implementados en este main */ 
@@ -147,6 +171,10 @@ function gameLoop(){
   detectIfBatOut()
   detectIfGarlicOut()
   detectIfCrossOut()
+  if(bloodCup){
+    detectIfCupOut()
+  }
+  
   
 
   /* detectar colisiones para quitar vida o dar puntos 
@@ -154,10 +182,18 @@ function gameLoop(){
   detectIfCollWithBat()
   detectIfCollWithGarlic()
   detectIfCollWithCross()
+  if(bloodCup){
+  detectIfCollWithCup()
+  }
+  
+  
+
+
+  
 
 }
 
-function gameOver(){
+function gameOver(){ 
   //clean the intervals
   musicGameNode.pause();
   clearInterval(intervalGameLoopId)
@@ -168,12 +204,13 @@ function gameOver(){
   
   
   
-  //cleam game-box
+  //clean game-box
   gameBoxNode.innerHTML = ""
   cloudsArr = []
   garlicArr = []
   batArr = []
   crossArr = []
+  bloodCup = null
   musicGameButtonNode.src = "./resources/sound.png";
   lifeBarNode.src = "./resources/life1.png";
 
@@ -239,6 +276,8 @@ function addCross(){
   crossArr.push(newCross);
 }
 
+
+
 /* functions to remove the elements when out*/ 
 function detectIfCloudOut(){
   if(cloudsArr.length === 0){
@@ -286,6 +325,16 @@ function detectIfCrossOut(){
     //we remove it from js
     crossArr.shift();
     
+  }
+}
+
+function  detectIfCupOut() {
+  if(bloodCup === null){
+    return
+  }
+  if(bloodCup.x + bloodCup.w <= 0){
+    
+    bloodCup.x= gameBoxNode.offsetWidth + pixelsSpaceForNewBloodCup
   }
 }
 /* functions to detect the collision with the elements */ 
@@ -382,8 +431,8 @@ function detectIfCollWithGarlic(){
           } else if (mainCharacter.life <= 25){
             lifeBarNode.src = "./resources/life4.png"
           }
-          garlicAudioNode.load()
-          garlicAudioNode.play()
+          badElementAudioNode.load()
+          badElementAudioNode.play()
           mainCharacter.node.src = "./resources/mainCharDamaged.gif"
           setTimeout(()=>{
           mainCharacter.node.src = "./resources/mainChar2.gif"
@@ -435,7 +484,7 @@ function detectIfCollWithCross(){
         } else if (mainCharacter.life <= 25){
           lifeBarNode.src = "./resources/life4.png"
         }
-        garlicAudioNode.play()
+        badElementAudioNode.play()
         mainCharacter.node.src = "./resources/mainCharDamaged.gif"
         setTimeout(()=>{
         mainCharacter.node.src = "./resources/mainChar2.gif"
@@ -445,6 +494,46 @@ function detectIfCollWithCross(){
     
   } 
 })
+}
+
+function detectIfCollWithCup(){
+  if (
+    mainCharacter.x < (bloodCup.x + bloodCup.w) &&
+    mainCharacter.x + mainCharacter.w > bloodCup.x + bloodCup.w &&
+    mainCharacter.y < bloodCup.y + bloodCup.h &&
+    mainCharacter.y + mainCharacter.h > bloodCup.y &&
+    mainCharacter.life > 0
+  ) {
+    //logic recharging life
+    if (mainCharacter.isDead === false){
+    
+        mainCharacter.life += bloodCup.lifeBack
+        if(mainCharacter.life > maxlifeCharacter){
+          mainCharacter.life = maxlifeCharacter
+          lifeBarNode.src = "./resources/life1.png"
+        } else if(mainCharacter.life <= 75 && mainCharacter.life > 50){
+          lifeBarNode.src = "./resources/life2.png"
+          
+        } else if (mainCharacter.life <= 50 && mainCharacter.life > 25) {
+          lifeBarNode.src = "./resources/life3.png"
+          
+        } else if (mainCharacter.life <= 25){
+          lifeBarNode.src = "./resources/life4.png"
+        }
+
+        lifeNode.innerHTML = `LIFE : 0${mainCharacter.life}`
+    
+        cupAudioAudioNode.load()
+        cupAudioAudioNode.play()
+        mainCharacter.node.src = "./resources/mainCharDamaged.gif"
+        setTimeout(()=>{
+        mainCharacter.node.src = "./resources/mainChar2.gif"
+        }, 200);
+        
+        bloodCup.node.remove()
+        bloodCup = null
+    }
+  }
 }
 
                            /*     SCREEN CHANGES  */
@@ -500,7 +589,7 @@ function handleArrow(event){
       mainCharacter.node.src = "./resources/mainCharLeft.gif"
       }
       break;
-    case "ArrowUp":
+    /* case "ArrowUp":
       if(mainCharacter.y >= 100 && mainCharacter.isJumping === false){
         mainCharacter.jump();
         mainCharacter.isJumping = true
@@ -513,7 +602,7 @@ function handleArrow(event){
         mainCharacter.isJumping = false
       }
     
-       break;
+       break; */
       };
 }
 

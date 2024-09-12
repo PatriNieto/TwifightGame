@@ -16,14 +16,24 @@ body{
   margin: 20px;
 }
 
-#intro-box, #outro-screen {
+#intro-box {
   display: none;
   color:white;
   font-size: 3em;
-  text-align: center;
-  
+  text-align: center; 
 }
-#intro-box img, #outro-screen img {
+
+#outro-screen{
+  display: none;
+  color:white;
+  font-size: 3em;
+  text-align: center; 
+}
+
+#intro-box img  {
+  height: 95vh;
+}
+#outro-screen img {
   height: 95vh;
 }
 
