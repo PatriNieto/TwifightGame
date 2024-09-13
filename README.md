@@ -1,9 +1,9 @@
 # TwifightGame
 A simple-nice-dark-game
 
-## [Play the Game!]()
+## [Play the Game!](https://patrinieto.github.io/TwifightGame/)
 
-![](https://drive.google.com/file/d/17FXWB2t5qmbC_s5bvxC1I3XElxb-P6AQ/view?usp=sharing)
+![Game Logo](https://drive.google.com/file/d/17FXWB2t5qmbC_s5bvxC1I3XElxb-P6AQ/view?usp=sharing)
 
 
 # Description
