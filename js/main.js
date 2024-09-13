@@ -1,18 +1,20 @@
-/* VARIABLES DE LÓGICA DEL JUEGO */
+/* VARIABLES FOR GAME LOGIC */
 let pointsToWin = 700
 let pixelsCharMove = 10
 let lifeLimitToBack = 50
 let maxlifeCharacter = 100
-pixelsSpaceForNewBloodCup = 2000
-/* selectores del DOM */
-//las 3 pantallas principales: 
+let pixelsSpaceForNewBloodCup = 2000
+let controlSpaceBAr = true
+
+/* selectors from DOM */
+//main screens nodes
 const startScreenNode = document.querySelector("#start-screen");
 const gameScreenNode = document.querySelector("#game-screen");
 const endScreenNode = document.querySelector("#end-screen");
 const  gameBoxNode = document.querySelector("#game-box");
 const introScreenNode = document.querySelector("#intro-box");
+const pauseScreenNode = document.querySelector("#pause-screen")
 const outroScreenNode = document.querySelector("#outro-screen");
-
 // DOM elements
 let lifeNode = gameScreenNode.querySelector("#life");
 let pointsNode = gameScreenNode.querySelector("#points");
@@ -116,10 +118,7 @@ function startGame(){
 
   //cloud elements
   intervalCloud = setInterval(()=>{
-    //accedemos al src de la imagen 
-
     addCloud()
-
   }, frecClouds)
   //add bat elements 
   
@@ -141,6 +140,7 @@ function startGame(){
   /* mainCharacter jump() */
 gameBoxNode.addEventListener("click", handleClickJump); 
 window.addEventListener("keydown", handleArrow)  
+window.addEventListener("keydown", handleSpaceBar)  
 }
 
 function gameLoop(){
@@ -572,6 +572,7 @@ function handleClickJump(){
 
 function handleArrow(event){
   switch(event.key){
+    
     case "ArrowRight":
       if(mainCharacter.x <= gameBoxNode.offsetWidth-150){
         mainCharacter.x += pixelsCharMove
@@ -622,4 +623,109 @@ musicGameButtonNode.addEventListener("click", ()=>{
   musicGameButtonNode.src = "./resources/sound.png"
  }
 })
+
+
+//pause 
+
+//let pauseButtonNode
+//pauseButtonNode.addEventListener("keydown", handleSpaceBar)
+function pause(){
+  //mostrar un div con texto pause
+  //display none to flex
+  //parar la interaccion del raton y las flechas
+  window.removeEventListener("keydown", handleArrow)
+  gameBoxNode.removeEventListener("click", handleClickJump)
+  pauseScreenNode.style.display = "flex"
+  gameScreenNode.style.display = "none"
+
+  //para  el movimiento en x de todos los elementos
+  garlicArr.forEach((eachGarlic)=>{
+    eachGarlic.speed = 0
+  }) 
+  cloudsArr.forEach((eachCloud)=>{
+    eachCloud.speed = 0
+  }) 
+  crossArr.forEach((eachCross)=>{
+    eachCross.speed = 0
+  }) 
+  batArr.forEach((eachBat)=>{
+    eachBat.speed = 0
+  }) 
+  bloodCup.speed = 0 
+  //parar la musica
+  musicGameNode.pause()
+  
+  
+  clearInterval(intervalGameLoopId)
+  clearInterval(intervalCloud)
+  clearInterval(intervalBatsId)
+  clearInterval(intervalGarlic)
+  clearInterval(intervalCross)
+
+}
+
+function continuar() {
+  //reanudar todo en el mismo punto en el que estaba
+  gameBoxNode.addEventListener("click", handleClickJump); 
+  window.addEventListener("keydown", handleArrow)  
+  garlicArr.forEach((eachGarlic)=>{
+    eachGarlic.speed = 2
+  }) 
+  cloudsArr.forEach((eachCloud)=>{
+    eachCloud.speed = 0.5
+  }) 
+  crossArr.forEach((eachCross)=>{
+    eachCross.speed = 1.5
+  }) 
+  batArr.forEach((eachBat)=>{
+    eachBat.speed = 2
+  }) 
+  bloodCup.speed = 2 
+
+  musicGameNode.play()
+
+  //recuperamos los intervalos
+  intervalGameLoopId = setInterval(()=>{
+    gameLoop()
+  }, Math.round(1000/60));
+
+  intervalCloud = setInterval(()=>{
+    addCloud()
+  }, frecClouds)
+
+  intervalBatsId = setInterval(()=>{
+    addBat();
+  }, frecBat);
+
+  intervalGarlic = setInterval (()=>{
+    addGarlic();
+  },frecGarlic );
+
+  intervalCross =  setInterval (()=>{
+    addCross();
+  },frecCross );
+
+  pauseScreenNode.style.display = "none"
+  gameScreenNode.style.display = "flex"
+  
+
+}
+
+
+
+  
+
+function handleSpaceBar(event){
+  if(event.key === " "){
+    
+      if(controlSpaceBAr){
+      pause()
+      controlSpaceBAr = false
+  }   else {
+      continuar()
+      controlSpaceBAr = true
+  } 
+      }
+}
+
 

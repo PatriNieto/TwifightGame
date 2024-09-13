@@ -69,6 +69,24 @@ body{
   align-items: baseline;
   position: relative;
 }
+#pause-screen {
+  width: 90vw  ;
+  display:none;
+  font-size: 3em;
+  color: aliceblue;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+#pause-screen p {
+  margin: auto;
+  align-content: center;  
+}
+
+.pauseInterior {
+    height: 95vh;
+}
 
 #audio-icon{
   margin: 0;

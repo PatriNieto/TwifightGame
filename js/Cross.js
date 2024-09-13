@@ -10,6 +10,7 @@ class Cross extends Garlic {
     this.w = 100
     this.h = 120 
     this.damage = 20
+    this.speed = 1.5
 
 
     //inclusion en el DOM
