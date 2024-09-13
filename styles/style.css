@@ -14,6 +14,9 @@ body{
 #start-screen p {
   line-height: 20px;
   margin: 20px;
+  white-space: nowrap;
+  
+
 }
 
 #intro-box {
@@ -70,7 +73,7 @@ body{
   position: relative;
 }
 #pause-screen {
-  width: 90vw  ;
+  width: 90vw ;
   display:none;
   font-size: 3em;
   color: aliceblue;
@@ -78,15 +81,15 @@ body{
   justify-content: center;
   align-items: center;
   margin: auto;
+  text-align: center;
+  padding: 20px
 }
 #pause-screen p {
   margin: auto;
   align-content: center;  
 }
 
-.pauseInterior {
-    height: 95vh;
-}
+
 
 #audio-icon{
   margin: 0;
