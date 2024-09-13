@@ -3,8 +3,9 @@ A simple-nice-dark-game
 
 ## [Play the Game!](https://patrinieto.github.io/TwifightGame/)
 
-![Game Logo](https://drive.google.com/file/d/17FXWB2t5qmbC_s5bvxC1I3XElxb-P6AQ/view?usp=sharing)
+![Game Logo](https://ibb.co/cNZYnQ2)
 
+![Game Logo](www.your-image-logo-here.com)
 
 # Description
 
