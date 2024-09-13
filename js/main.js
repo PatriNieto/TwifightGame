@@ -31,7 +31,8 @@ let isSound = true
 let musicIntroGameNode = introScreenNode.querySelector("audio");
 musicIntroGameNode.volume = 0.1
 let lifeBarNode = gameScreenNode.querySelector("#life-bar");
-//botones
+let outroImgNode = outroScreenNode.querySelector("img")
+//botones#
 const startButtonNode = document.querySelector("#start-button");
 const ReStartButtonNode = document.querySelector("#restart-button");
 //personajes y elementos
@@ -78,7 +79,11 @@ function startGame(){
   startScreenNode.style.display = "none"
   introScreenNode.style.display = "none"
   gameScreenNode.style.display = "flex"
-  
+  outroImgNode.remove()
+  document.createElement("img")
+  outroScreenNode.append(outroImgNode)
+  outroImgNode.src= "./resources/outro.gif"
+
 
   //elementos iniciales del juego
   mainCharacter = new MainCharacter()
@@ -213,6 +218,7 @@ function gameOver(){
   bloodCup = null
   musicGameButtonNode.src = "./resources/sound.png";
   lifeBarNode.src = "./resources/life1.png";
+  window.removeEventListener("keydown", handleSpaceBar)
 
   
   
@@ -373,6 +379,8 @@ function detectIfCollWithBat(){
       mainCharacter.node.src = "./resources/mainCharVict.gif"
       gameBoxNode.removeEventListener("click", handleClickJump)
       window.removeEventListener("keydown", handleArrow)
+      window.removeEventListener("keydown", handleSpaceBar)
+
       clearTimeout(afterJumpTimeOutId)
       
     } else if(mainCharacter.points < pointsToWin && mainCharacter.life > 0){
@@ -418,6 +426,7 @@ function detectIfCollWithGarlic(){
           
           gameBoxNode.removeEventListener("click",handleClickJump)
           window.removeEventListener("keydown", handleArrow)
+          window.removeEventListener("keydown", handleSpaceBar)
           clearTimeout(afterJumpTimeOutId)
           lifeBarNode.src = "./resources/life5.png"
           
@@ -470,6 +479,8 @@ function detectIfCollWithCross(){
         mainCharacter.node.src = "./resources/mainCharDying3.gif"
         gameBoxNode.removeEventListener("click",handleClickJump)
         window.removeEventListener("keydown", handleArrow)
+        window.removeEventListener("keydown", handleSpaceBar)
+
         clearTimeout(afterJumpTimeOutId)
         lifeBarNode.src = "./resources/life5.png"
 
@@ -651,7 +662,10 @@ function pause(){
   batArr.forEach((eachBat)=>{
     eachBat.speed = 0
   }) 
-  bloodCup.speed = 0 
+  if(bloodCup){
+    bloodCup.speed = 0 
+  }
+ 
   //parar la musica
   musicGameNode.pause()
   
@@ -680,8 +694,9 @@ function continuar() {
   batArr.forEach((eachBat)=>{
     eachBat.speed = 2
   }) 
+  if(bloodCup){
   bloodCup.speed = 2 
-
+  }
   musicGameNode.play()
 
   //recuperamos los intervalos
