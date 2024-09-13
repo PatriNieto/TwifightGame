@@ -3,7 +3,7 @@ A simple-nice-dark-game
 
 ## [Play the Game!]()
 
-![Game Logo](https://patrinieto.github.io/TwifightGame/)
+![](https://drive.google.com/file/d/17FXWB2t5qmbC_s5bvxC1I3XElxb-P6AQ/view?usp=sharing)
 
 
 # Description
@@ -139,13 +139,13 @@ The character must get his teeth by hunting seven bats in the cemetery, but he w
 # Extra Links 
 
 ### Sketch
-[Link](https://www.figma.com/design/szAl99az5T2fVT5XHQlYN4/Untitled?node-id=0-1&t=xn31OnPCywAdGC69-1)
+[Figma very simple sketch](https://www.figma.com/design/szAl99az5T2fVT5XHQlYN4/Untitled?node-id=0-1&t=xn31OnPCywAdGC69-1)
 
 ### Trello
-[Link](https://trello.com/invite/b/66e08746ad6a88669b971d96/ATTIce2d3dff652a65fcd4a21edb2c13a56c339D1225/twifght-kanban-template)
+[Trello Kanban board](https://trello.com/invite/b/66e08746ad6a88669b971d96/ATTIce2d3dff652a65fcd4a21edb2c13a56c339D1225/twifght-kanban-template)
 
 ### Slides
-[Link](https://docs.google.com/presentation/d/1Q2Qxuo_E1lLrtAxtwwlAficsv4i3p7mAIzZxiZ_pXcw/edit?usp=sharing)
+[Simple presentation](https://docs.google.com/presentation/d/1Q2Qxuo_E1lLrtAxtwwlAficsv4i3p7mAIzZxiZ_pXcw/edit?usp=sharing)
 
 ## Deploy
-[Link](https://patrinieto.github.io/TwifightGame/)
+[The Link for Deployed Twifight](https://patrinieto.github.io/TwifightGame/)
